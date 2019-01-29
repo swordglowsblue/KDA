@@ -54,10 +54,41 @@ dependencies {
 
 You can download latest [artifact](https://gitlab.com/mdashlw/kda/pipelines) of build and add it to classpath of your project. 
 
-# Features 
+# Features
 
-TODO
+## Modern JDA Builder
 
+This API provides new JDA Builder.
+
+```kotlin
+import com.github.mdashl.kda.jda
+
+val jda = jda("TOKEN_GOES_HERE") {
+    setActivity(Activity.playing("with KDA"))
+    // All methods from original JDABuilder
+}
+```
+
+## Modern Embed Builder
+
+This API provides new Embed Builder.
+
+```kotlin
+import com.github.mdashl.kda.embed
+import java.time.OffsetDateTime
+
+embed {
+    title("Hello!")
+    field {
+        name("Hello, world")
+        value("**Hello, world!**")
+    }
+    timestamp(OffsetDateTime.now())
+    footer {
+        text("That's a greeting message")
+    }
+}
+```
 
 # License
 
