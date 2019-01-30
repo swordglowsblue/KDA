@@ -56,6 +56,46 @@ You can download latest [artifact](https://gitlab.com/mdashlw/kda/pipelines) of 
 
 ## Features
 
+### Modern Command Handler
+
+This API provides new Command Handler.
+
+```kotlin
+jda.setupCommandHandler(CommandHandler.Options("PREFIX", "OWNER ID"))
+
+jda.registerCommand(TestCommand)
+
+object TestCommand : Command() {
+    override val aliases: List<String> = listOf("test")
+    override val description: String = "just test"
+    override val usage: String = "some usage"
+
+    @GeneralCommand
+    fun test() {
+        reply(
+            embed {
+                // ...
+            }
+        )
+    }
+
+    @GeneralCommand
+    fun test(argument1: String, argument2: Boolean) {
+        // ...
+    }
+
+    @SubCommand("subcmd")
+    fun subcmd() {
+        reply("empty subcmd")
+    }
+
+    @SubCommand("subcmd2", "anotheralias")
+    fun subcmd2(argument: Int) {
+        reply("The number is $argument")
+    }
+}
+```
+
 ### Modern JDA Builder
 
 This API provides new JDA Builder.
