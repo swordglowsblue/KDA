@@ -1,12 +1,8 @@
 package com.github.mdashl.kda.extensions
 
-import org.apache.commons.text.StringEscapeUtils
-
 val SPACE_PATTERN = " +".toRegex()
 
 fun String.removeDoubleSpaces(): String = replace(SPACE_PATTERN, " ")
-
-fun String.escape(): String = StringEscapeUtils.escapeHtml4(this)
 
 fun String.isInt(): Boolean =
     try {

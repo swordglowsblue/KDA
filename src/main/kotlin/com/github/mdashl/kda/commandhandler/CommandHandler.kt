@@ -36,7 +36,7 @@ object CommandHandler : ListenerAdapter() {
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         val message = event.message
-        val content = message.contentRaw.removeDoubleSpaces().escape()
+        val content = message.contentRaw.removeDoubleSpaces()
         val command = getCommand(content) ?: return
         val guild = event.guild
         val member = event.member
