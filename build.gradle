@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    implementation('net.dv8tion:JDA:4.ALPHA.0_21') {
+    implementation('net.dv8tion:JDA:4.ALPHA.0_22') {
         exclude module: 'opus-java'
     }
     implementation 'ch.qos.logback:logback-classic:1.2.3'
