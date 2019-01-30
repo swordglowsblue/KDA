@@ -1,5 +1,6 @@
 package com.github.mdashl.kda.commandhandler
 
+import com.github.mdashl.kda.builders.EmbedBuilder
 import com.github.mdashl.kda.commandhandler.CommandHandler.jda
 import com.github.mdashl.kda.commandhandler.annotations.GeneralCommand
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
@@ -32,6 +33,10 @@ abstract class Command {
 
     fun reply(embed: MessageEmbed) {
         channel.sendMessage(embed).queue()
+    }
+
+    inline fun reply(init: EmbedBuilder.() -> Unit) {
+        reply(embed(init))
     }
 
     fun replyHelp() {
