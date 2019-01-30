@@ -60,9 +60,15 @@ You can download latest [artifact](https://gitlab.com/mdashlw/kda/pipelines) of 
 
 This API provides new Command Handler.
 
+#### Setup
+
 ```kotlin
 jda.setupCommandHandler(CommandHandler.Options("PREFIX", "OWNER ID"))
+```
 
+#### Simple Command
+
+```kotlin
 jda.registerCommand(TestCommand)
 
 object TestCommand : Command() {
@@ -92,6 +98,20 @@ object TestCommand : Command() {
     @SubCommand("subcmd2", "anotheralias")
     fun subcmd2(argument: Int) {
         reply("The number is $argument")
+    }
+}
+```
+
+#### Command Contexts
+
+Command Handler supports custom command contexts.
+
+```kotlin
+jda.registerCommandContext(TestContext)
+
+object TestContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
+    override fun handle(arg: String): MyCustomType {
+        // ...
     }
 }
 ```
