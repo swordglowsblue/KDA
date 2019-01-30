@@ -81,9 +81,9 @@ class EmbedBuilder {
         )
 
     class Author {
-        var name: String? = null
-        var url: String? = null
-        var icon: String? = null
+        private var name: String? = null
+        private var url: String? = null
+        private var icon: String? = null
 
         fun name(name: String) {
             this.name = name
@@ -101,8 +101,8 @@ class EmbedBuilder {
     }
 
     class Footer {
-        var text: String? = null
-        var icon: String? = null
+        private var text: String? = null
+        private var icon: String? = null
 
         fun text(text: String) {
             this.text = text
