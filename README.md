@@ -66,15 +66,21 @@ This API provides new Command Handler.
 jda.setupCommandHandler(CommandHandler.Options("PREFIX", "OWNER ID"))
 ```
 
+#### Register Command
+
+```kotlin
+jda.registerCommand(...)
+```
+
 #### Simple Command
 
 ```kotlin
-jda.registerCommand(TestCommand)
-
 object TestCommand : Command() {
     override val aliases: List<String> = listOf("test")
     override val description: String = "just test"
     override val usage: String = "some usage"
+    
+    // Available variables here: guild: Guild, member: Member, channel: TextChannel, message: Message
 
     @GeneralCommand
     fun test() {
@@ -102,13 +108,29 @@ object TestCommand : Command() {
 }
 ```
 
+#### Simple Staff Command
+
+Only owner has access to the staff commands.
+
+```kotlin
+object TestStaffCommand : StaffCommand() {
+    // ...
+}
+```
+
 #### Command Contexts
 
 Command Handler supports custom command contexts.
 
-```kotlin
-jda.registerCommandContext(TestContext)
+##### Register Command Context
 
+```kotlin
+jda.registerCommandContext(...)
+```
+
+##### Simple Command Context
+
+```kotlin
 object TestContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
     override fun handle(arg: String): MyCustomType {
         // ...
