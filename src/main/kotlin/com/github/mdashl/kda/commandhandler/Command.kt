@@ -40,49 +40,43 @@ abstract class Command {
     }
 
     fun replyHelp() {
-        reply(
-            embed {
-                title("Command $mainAlias")
-                thumbnail(jda.selfUser.effectiveAvatarUrl)
-                field {
-                    name("Description")
-                    value(description)
-                    inline(false)
-                }
-                field {
-                    name("Aliases")
-                    value(aliases.joinToString())
-                    inline(false)
-                }
-                field {
-                    name("Usage")
-                    value("`${CommandHandler.options.prefix}$mainAlias $usage`")
-                    inline(false)
-                }
+        reply {
+            title("Command $mainAlias")
+            thumbnail(jda.selfUser.effectiveAvatarUrl)
+            field {
+                name("Description")
+                value(description)
+                inline(false)
             }
-        )
+            field {
+                name("Aliases")
+                value(aliases.joinToString())
+                inline(false)
+            }
+            field {
+                name("Usage")
+                value("`${CommandHandler.options.prefix}$mainAlias $usage`")
+                inline(false)
+            }
+        }
     }
 
     fun replyError(error: String) {
-        reply(
-            embed {
-                title("Error")
-                description(error)
-                color(204, 0, 0)
-            }
-        )
+        reply {
+            title("Error")
+            description(error)
+            color(204, 0, 0)
+        }
     }
 
     fun replyUncaughtException(exception: Throwable) {
-        reply(
-            embed {
-                title("Uncaught Exception")
-                description(exception.toString())
-                footer {
-                    text("Report this to ${CommandHandler.options.owner.asTag}")
-                }
-                color(204, 0, 0)
+        reply {
+            title("Uncaught Exception")
+            description(exception.toString())
+            footer {
+                text("Report this to ${CommandHandler.options.owner.asTag}")
             }
-        )
+            color(204, 0, 0)
+        }
     }
 }
