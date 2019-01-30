@@ -35,13 +35,13 @@ object CommandHandler : ListenerAdapter() {
             ?: throw IllegalArgumentException("No command context for ${type.simpleName}")
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        val guild = event.guild
-        val member = event.member
-        val user = member.user
-        val channel = event.channel
         val message = event.message
         val content = message.contentRaw.removeDoubleSpaces()
         val command = getCommand(content) ?: return
+        val guild = event.guild
+        val member = event.member
+        val user = event.author
+        val channel = event.channel
         val args = content.split(" ").drop(1)
 
         command.guild = guild
