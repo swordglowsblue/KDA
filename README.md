@@ -12,7 +12,7 @@ JDA Utilities for Kotlin.
         <artifactId>kda</artifactId>
         <groupId>com.github.mdashl</groupId>
         <scope>compile</scope>
-        <version>1.0</version> 
+        <version>1.1</version> 
   </dependency>
 </depedencies>
 
@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.mdashl:kda:1.0'
+    implementation 'com.github.mdashl:kda:1.1'
 }
 ```
 
@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.mdashl:kda:1.0")
+    implementation("com.github.mdashl:kda:1.1")
 }
 ```
 
