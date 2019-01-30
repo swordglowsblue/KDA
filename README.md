@@ -2,9 +2,9 @@
 
 JDA Utilities for Kotlin.
 
-# Importing
+## Importing
 
-## Maven
+### Maven
 
 ```xml
 <depedencies>
@@ -24,7 +24,7 @@ JDA Utilities for Kotlin.
 </repositories>
 ```
 
-## Gradle
+### Gradle
 
 **Groovy DSL**:
 
@@ -50,13 +50,13 @@ dependencies {
 }
 ```
 
-## JAR artifact
+### JAR artifact
 
 You can download latest [artifact](https://gitlab.com/mdashlw/kda/pipelines) of build and add it to classpath of your project. 
 
-# Features
+## Features
 
-## Modern JDA Builder
+### Modern JDA Builder
 
 This API provides new JDA Builder.
 
@@ -69,7 +69,7 @@ val jda = jda("TOKEN_GOES_HERE") {
 }
 ```
 
-## Modern Embed Builder
+### Modern Embed Builder
 
 This API provides new Embed Builder.
 
@@ -90,6 +90,6 @@ embed {
 }
 ```
 
-# License
+## License
 
 The project is under [MIT license](https://gitlab.com/mdashlw/kda/blob/master/LICENSE).
