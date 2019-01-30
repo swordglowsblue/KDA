@@ -12,7 +12,7 @@ JDA Utilities for Kotlin.
         <artifactId>kda</artifactId>
         <groupId>com.github.mdashl</groupId>
         <scope>compile</scope>
-        <version>1.1</version> 
+        <version>LATEST</version> 
   </dependency>
 </depedencies>
 
@@ -26,6 +26,8 @@ JDA Utilities for Kotlin.
 
 ### Gradle
 
+Replace `LATEST_VERSION` with latest version
+
 **Groovy DSL**:
 
 ```gradle
@@ -34,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.mdashl:kda:1.1'
+    implementation 'com.github.mdashl:kda:LATEST_VERSION'
 }
 ```
 
@@ -46,7 +48,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.mdashl:kda:1.1")
+    implementation("com.github.mdashl:kda:LATEST_VERSION")
 }
 ```
 
