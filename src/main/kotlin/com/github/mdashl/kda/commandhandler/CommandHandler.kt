@@ -15,6 +15,8 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import java.net.URISyntaxException
+import java.util.concurrent.ExecutionException
 
 object CommandHandler : ListenerAdapter() {
     lateinit var jda: JDA
@@ -114,6 +116,8 @@ object CommandHandler : ListenerAdapter() {
             is IllegalArgumentException -> command.replyError(exception.message.toString())
             is InsufficientPermissionException -> command.reply("I need **${exception.permission.getName()}** permission to work")
             is InvocationTargetException -> handleCommandException(command, exception.cause!!)
+            is ExecutionException -> handleCommandException(command, exception.cause!!)
+            is URISyntaxException -> command.replyError("Illegal character") // Don't send exception's message, because it contains URL that may contain some credentials
             else -> {
                 command.replyUncaughtException(exception)
                 exception.printStackTrace()
