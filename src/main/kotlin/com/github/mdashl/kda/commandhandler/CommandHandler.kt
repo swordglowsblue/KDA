@@ -12,13 +12,12 @@ import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
-import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.net.URISyntaxException
 import java.util.concurrent.ExecutionException
 
-object CommandHandler : ListenerAdapter() {
+object CommandHandler {
     lateinit var jda: JDA
     lateinit var options: Options
 
@@ -36,44 +35,46 @@ object CommandHandler : ListenerAdapter() {
         contexts.find { it.type == type }
             ?: throw IllegalArgumentException("No command context for ${type.simpleName}")
 
-    override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-        val message = event.message
-        val content = message.contentRaw.removeDoubleSpaces()
-        val command = getCommand(content) ?: return
-        val guild = event.guild
-        val member = event.member
-        val user = event.author
-        val channel = event.channel
-        val args = content.split(" ").drop(1)
+    private fun registerListener() {
+        jda.handlerOf<GuildMessageReceivedEvent> { event ->
+            val message = event.message
+            val content = message.contentRaw.removeDoubleSpaces()
+            val command = getCommand(content) ?: return@handlerOf
+            val guild = event.guild
+            val member = event.member
+            val user = event.author
+            val channel = event.channel
+            val args = content.split(" ").drop(1)
 
-        command.guild = guild
-        command.member = member
-        command.channel = channel
-        command.message = message
+            command.guild = guild
+            command.member = member
+            command.channel = channel
+            command.message = message
 
-        if (user.isBot) {
-            return
+            if (user.isBot) {
+                return@handlerOf
+            }
+
+            if (command is StaffCommand && options.ownerId != user.id) {
+                command.replyError("You are not allowed to use this command")
+                return@handlerOf
+            }
+
+            if (args.isEmpty()) {
+                invokeCommand(command, command.generalCommands.find { it.parameterCount == 0 }, channel)
+                return@handlerOf
+            }
+
+            val method =
+                command.subCommands.find { it.getAnnotation(SubCommand::class.java).value.containsIgnoreCase(args[0]) && it.parameterCount + 1 == args.size }
+
+            method?.let {
+                invokeCommand(command, it, channel, args, true)
+                return@handlerOf
+            }
+
+            invokeCommand(command, command.generalCommands.find { it.parameterCount == args.size }, channel, args)
         }
-
-        if (command is StaffCommand && options.ownerId != user.id) {
-            command.replyError("You are not allowed to use this command")
-            return
-        }
-
-        if (args.isEmpty()) {
-            invokeCommand(command, command.generalCommands.find { it.parameterCount == 0 }, channel)
-            return
-        }
-
-        val method =
-            command.subCommands.find { it.getAnnotation(SubCommand::class.java).value.containsIgnoreCase(args[0]) && it.parameterCount + 1 == args.size }
-
-        method?.let {
-            invokeCommand(command, it, channel, args, true)
-            return
-        }
-
-        invokeCommand(command, command.generalCommands.find { it.parameterCount == args.size }, channel, args)
     }
 
     private fun invokeCommand(
@@ -145,9 +146,8 @@ object CommandHandler : ListenerAdapter() {
         this.jda = jda
         this.options = options
 
+        registerListener()
         registerDefaults()
-
-        jda.addEventListener(this)
     }
 
     data class Options(val prefix: String, val ownerId: String) {
