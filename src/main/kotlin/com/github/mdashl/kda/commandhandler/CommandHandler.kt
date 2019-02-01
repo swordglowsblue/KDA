@@ -61,7 +61,7 @@ object CommandHandler {
                 return@handlerOf
             }
 
-            if (command is StaffCommand && options.ownerId != user.id) {
+            if (command is StaffCommand && options.ownerId != user.id && user.id !in options.staff) {
                 command.replyError("You are not allowed to use this command")
                 return@handlerOf
             }
@@ -161,7 +161,7 @@ object CommandHandler {
         registerDefaults()
     }
 
-    data class Options(val prefix: String, val ownerId: String) {
+    data class Options(val prefix: String, val ownerId: String, val staff: List<String> = emptyList()) {
         val owner: User
             get() = jda.getUserById(ownerId)
     }
