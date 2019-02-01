@@ -122,7 +122,10 @@ object CommandHandler {
 
     private fun handleCommandException(command: Command, exception: Throwable) {
         when (exception) {
-            is IllegalArgumentException -> command.replyError(exception.message.toString())
+            is IllegalArgumentException -> {
+                exception.cause?.let { handleCommandException(command, it) }
+                    ?: command.replyError(exception.message.toString())
+            }
             is InsufficientPermissionException -> command.reply("I need **${exception.permission.getName()}** permission to work")
             is InvocationTargetException -> handleCommandException(command, exception.cause!!)
             is ExecutionException -> handleCommandException(command, exception.cause!!)
