@@ -7,6 +7,9 @@ import com.github.mdashl.kda.commandhandler.contexts.IntContext
 import com.github.mdashl.kda.commandhandler.contexts.LongContext
 import com.github.mdashl.kda.commandhandler.contexts.StringContext
 import com.github.mdashl.kda.extensions.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.entities.User
@@ -16,10 +19,13 @@ import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.net.URISyntaxException
 import java.util.concurrent.ExecutionException
+import java.util.concurrent.Executors
 
 object CommandHandler {
     lateinit var jda: JDA
     lateinit var options: Options
+
+    private val POOL = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
     val commands: ArrayList<Command> = ArrayList()
     val contexts: ArrayList<CommandContext<*>> = ArrayList()
@@ -93,10 +99,12 @@ object CommandHandler {
             channel.sendTyping().queue()
         }
 
-        try {
-            method.invoke(command, *getCommandParameters(method, args.drop(offset.toInt())))
-        } catch (exception: Throwable) {
-            handleCommandException(command, exception)
+        GlobalScope.launch(POOL) {
+            try {
+                method.invoke(command, *getCommandParameters(method, args.drop(offset.toInt())))
+            } catch (exception: Throwable) {
+                handleCommandException(command, exception)
+            }
         }
     }
 

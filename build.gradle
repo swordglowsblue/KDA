@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.github.mdashl'
-version '1.5'
+version '1.6'
 
 repositories {
     jcenter()
@@ -12,14 +12,12 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     implementation('net.dv8tion:JDA:4.ALPHA.0_23') { exclude module: 'opus-java' }
     implementation 'ch.qos.logback:logback-classic:1.2.3'
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = '1.8'
-}
-compileTestKotlin {
     kotlinOptions.jvmTarget = '1.8'
 }
 
@@ -33,13 +31,13 @@ publishing {
     repositories {
         maven {
             url 'https://gitlab.com/api/v4/projects/10590152/packages/maven'
-			credentials(HttpHeaderCredentials) {
-				name = 'Job-Token'
-				value = System.getenv('CI_JOB_TOKEN')
-			}
-			authentication {
-				header(HttpHeaderAuthentication)
-			}
+            credentials(HttpHeaderCredentials) {
+                name = 'Job-Token'
+                value = System.getenv('CI_JOB_TOKEN')
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
         }
     }
 }
