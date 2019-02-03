@@ -27,6 +27,10 @@ abstract class Command {
     internal val subCommands: List<Method> =
         this::class.java.methods.filter { it.isAnnotationPresent(SubCommand::class.java) }
 
+    fun register() {
+        CommandHandler.commands += this
+    }
+
     fun reply(message: String) {
         channel.sendMessage(message).queue()
     }
