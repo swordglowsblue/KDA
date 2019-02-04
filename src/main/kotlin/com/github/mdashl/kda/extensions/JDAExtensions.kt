@@ -9,7 +9,7 @@ fun JDA.setupCommandHandler(options: CommandHandler.Options) {
     CommandHandler.setup(this, options)
 }
 
-inline fun <reified T : Event> JDA.handlerOf(crossinline action: (event: T) -> Unit) =
+inline fun <reified T : Event> JDA.handlerOf(crossinline action: (event: T) -> Unit) {
     addEventListener(
         object : ListenerAdapter() {
             override fun onGenericEvent(event: Event) {
@@ -19,3 +19,4 @@ inline fun <reified T : Event> JDA.handlerOf(crossinline action: (event: T) -> U
             }
         }
     )
+}

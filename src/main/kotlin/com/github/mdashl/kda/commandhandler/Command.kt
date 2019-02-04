@@ -83,4 +83,6 @@ abstract class Command {
             color(204, 0, 0)
         }
     }
+
+    open fun checkPermission(): Boolean = true
 }

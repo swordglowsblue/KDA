@@ -64,7 +64,7 @@ object CommandHandler {
                 return@handlerOf
             }
 
-            if (command is StaffCommand && options.ownerId != user.id && user.id !in options.staff) {
+            if (!command.checkPermission()) {
                 command.replyError("You are not allowed to use this command")
                 return@handlerOf
             }
