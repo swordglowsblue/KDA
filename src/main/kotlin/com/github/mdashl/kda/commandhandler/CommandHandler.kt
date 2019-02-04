@@ -6,7 +6,10 @@ import com.github.mdashl.kda.commandhandler.contexts.BooleanContext
 import com.github.mdashl.kda.commandhandler.contexts.IntContext
 import com.github.mdashl.kda.commandhandler.contexts.LongContext
 import com.github.mdashl.kda.commandhandler.contexts.StringContext
-import com.github.mdashl.kda.extensions.*
+import com.github.mdashl.kda.extensions.containsIgnoreCase
+import com.github.mdashl.kda.extensions.handlerOf
+import com.github.mdashl.kda.extensions.removeDoubleSpaces
+import com.github.mdashl.kda.extensions.toInt
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -143,14 +146,14 @@ object CommandHandler {
     }
 
     private fun registerDefaultContexts() {
-        jda.registerCommandContext(StringContext)
-        jda.registerCommandContext(IntContext)
-        jda.registerCommandContext(LongContext)
-        jda.registerCommandContext(BooleanContext)
+        StringContext.register()
+        IntContext.register()
+        LongContext.register()
+        BooleanContext.register()
     }
 
     private fun registerDefaultCommands() {
-        jda.registerCommand(HelpCommand)
+        HelpCommand.register()
     }
 
     fun setup(jda: JDA, options: Options) {
