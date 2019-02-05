@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
+import java.awt.Color
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.net.URISyntaxException
@@ -22,6 +23,7 @@ object CommandHandler {
     private val POOL = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
     lateinit var prefix: String
+    var defaultColor: Color? = null
 
     val commands: ArrayList<Command> = ArrayList()
     val contexts: ArrayList<CommandContext<*>> = ArrayList()
@@ -35,7 +37,8 @@ object CommandHandler {
     private fun getCommandContext(type: Class<*>): CommandContext<*> =
         contexts.find { it.type == type }
             ?: throw IllegalArgumentException(
-                "commandhandler.no_command_context".i18n().placeholder("type", type.simpleName)
+                "commandhandler.no_command_context".i18n()
+                    .placeholder("type", type.simpleName)
             )
 
     private fun registerListener() {
@@ -124,7 +127,8 @@ object CommandHandler {
                     ?: command.replyError(exception.message.toString())
             }
             is InsufficientPermissionException -> command.reply(
-                "commandhandler.bot_no_permission".i18n().placeholder("permission", exception.permission.getName())
+                "commandhandler.bot_no_permission".i18n()
+                    .placeholder("permission", exception.permission.getName())
             )
             is InvocationTargetException -> handleCommandException(command, exception.cause!!)
             is ExecutionException -> handleCommandException(command, exception.cause!!)
@@ -155,10 +159,14 @@ object CommandHandler {
 
     fun setup(options: Options) {
         this.prefix = options.prefix
+        this.defaultColor = options.defaultColor
 
         registerListener()
         registerDefaults()
     }
 
-    data class Options(val prefix: String)
+    data class Options(
+        val prefix: String,
+        val defaultColor: Color? = null
+    )
 }

@@ -5,7 +5,6 @@ import com.github.mdashl.kda.KDA.jda
 import com.github.mdashl.kda.builders.EmbedBuilder
 import com.github.mdashl.kda.commandhandler.annotations.GeneralCommand
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
-import com.github.mdashl.kda.embed
 import com.github.mdashl.kda.extensions.i18n
 import com.github.mdashl.kda.extensions.placeholder
 import net.dv8tion.jda.api.entities.*
@@ -43,7 +42,7 @@ abstract class Command {
     }
 
     inline fun reply(init: EmbedBuilder.() -> Unit) {
-        reply(embed(init))
+        reply(EmbedBuilder().apply(init).apply { CommandHandler.defaultColor?.let { color(it) } }.build())
     }
 
     fun replyHelp() {
