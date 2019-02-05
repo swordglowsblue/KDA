@@ -5,7 +5,8 @@ import net.dv8tion.jda.api.entities.User
 import java.util.*
 
 object KDA {
-    val MESSAGES: ResourceBundle = ResourceBundle.getBundle("messages", locale)
+    lateinit var MESSAGES: ResourceBundle
+        private set
 
     lateinit var jda: JDA
 
@@ -19,6 +20,8 @@ object KDA {
         this.owner = jda.getUserById(options.owner)
         this.staff = options.staff
         this.locale = options.locale
+
+        this.MESSAGES = ResourceBundle.getBundle("messages", locale)
     }
 
     data class Options(
