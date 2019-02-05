@@ -54,7 +54,13 @@ dependencies {
 
 ### JAR artifact
 
-You can download latest [artifact](https://gitlab.com/mdashlw/kda/pipelines) of build and add it to classpath of your project. 
+You can download latest [artifact](https://gitlab.com/mdashlw/kda/pipelines) of build and add it to classpath of your project.
+
+## Getting Started
+
+```kotlin
+jda.setupKDA(KDA.Options(owner = "OWNER ID", staff = listOf("STAFF", "IDS"), locale = Locale.US))
+``` 
 
 ## Features
 
@@ -65,13 +71,13 @@ This API provides new Command Handler.
 #### Setup
 
 ```kotlin
-jda.setupCommandHandler(CommandHandler.Options("PREFIX", "OWNER ID"))
+CommandHandler.setup(CommandHandler.Options(prefix = "!"))
 ```
 
 #### Register Command
 
 ```kotlin
-jda.registerCommand(...)
+command.register()
 ```
 
 #### Simple Command
@@ -87,9 +93,7 @@ object TestCommand : Command() {
     @GeneralCommand
     fun test() {
         reply(
-            embed {
-                // ...
-            }
+            title("test embed")
         )
     }
 
@@ -110,12 +114,22 @@ object TestCommand : Command() {
 }
 ```
 
-#### Simple Staff Command
+#### Simple Owner Command
 
-Only owner has access to the staff commands.
+Only owner has access to the owner commands.
 
 ```kotlin
-object TestStaffCommand : StaffCommand() {
+object SimpleOwnerCommand : OwnerCommand() {
+    // ...
+}
+```
+
+#### Simple Staff Command
+
+Only staff has access to the staff commands.
+
+```kotlin
+object SimpleStaffCommand : StaffCommand() {
     // ...
 }
 ```
@@ -127,14 +141,14 @@ Command Handler supports custom command contexts.
 ##### Register Command Context
 
 ```kotlin
-jda.registerCommandContext(...)
+context.register()
 ```
 
 ##### Simple Command Context
 
 ```kotlin
-object TestContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
-    override fun handle(arg: String): MyCustomType {
+object SimpleContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
+    override fun handle(message: Message, arg: String): MyCustomType {
         // ...
     }
 }

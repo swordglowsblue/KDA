@@ -1,12 +1,12 @@
 package com.github.mdashl.kda.extensions
 
-import com.github.mdashl.kda.commandhandler.CommandHandler
+import com.github.mdashl.kda.KDA
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.Event
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
-fun JDA.setupCommandHandler(options: CommandHandler.Options) {
-    CommandHandler.setup(this, options)
+fun JDA.setupKDA(options: KDA.Options) {
+    KDA.setup(this, options)
 }
 
 inline fun <reified T : Event> JDA.handlerOf(crossinline action: (event: T) -> Unit) {

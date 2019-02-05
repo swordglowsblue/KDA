@@ -1,37 +1,32 @@
 package com.github.mdashl.kda.commandhandler
 
+import com.github.mdashl.kda.KDA.jda
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
 import com.github.mdashl.kda.commandhandler.commands.HelpCommand
 import com.github.mdashl.kda.commandhandler.contexts.*
-import com.github.mdashl.kda.extensions.containsIgnoreCase
-import com.github.mdashl.kda.extensions.handlerOf
-import com.github.mdashl.kda.extensions.removeDoubleSpaces
-import com.github.mdashl.kda.extensions.toInt
+import com.github.mdashl.kda.extensions.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.TextChannel
-import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.net.URISyntaxException
+import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 
 object CommandHandler {
-    lateinit var jda: JDA
-    lateinit var options: Options
-
     private val POOL = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+
+    lateinit var prefix: String
 
     val commands: ArrayList<Command> = ArrayList()
     val contexts: ArrayList<CommandContext<*>> = ArrayList()
 
     private fun getCommand(message: String): Command? {
-        val prefix = options.prefix
         val s = message.split(" ")[0]
 
         return commands.find { command -> command.aliases.any { s.equals(prefix + it, true) } }
@@ -39,7 +34,9 @@ object CommandHandler {
 
     private fun getCommandContext(type: Class<*>): CommandContext<*> =
         contexts.find { it.type == type }
-            ?: throw IllegalArgumentException("No command context for ${type.simpleName}")
+            ?: throw IllegalArgumentException(
+                "commandhandler.no_command_context".i18n().placeholder("type", type.simpleName)
+            )
 
     private fun registerListener() {
         jda.handlerOf<GuildMessageReceivedEvent> { event ->
@@ -62,7 +59,7 @@ object CommandHandler {
             }
 
             if (!command.checkPermission()) {
-                command.replyError("You are not allowed to use this command")
+                command.replyError("commandhandler.user_no_permission".i18n())
                 return@handlerOf
             }
 
@@ -126,10 +123,12 @@ object CommandHandler {
                 exception.cause?.let { handleCommandException(command, it) }
                     ?: command.replyError(exception.message.toString())
             }
-            is InsufficientPermissionException -> command.reply("I need **${exception.permission.getName()}** permission to work")
+            is InsufficientPermissionException -> command.reply(
+                "commandhandler.bot_no_permission".i18n().placeholder("permission", exception.permission.getName())
+            )
             is InvocationTargetException -> handleCommandException(command, exception.cause!!)
             is ExecutionException -> handleCommandException(command, exception.cause!!)
-            is URISyntaxException -> command.replyError("Illegal character") // Don't send exception's message, because it contains URL that may contain some credentials
+            is URISyntaxException -> command.replyError("commandhandler.illegal_character".i18n())
             else -> {
                 command.replyUncaughtException(exception)
                 exception.printStackTrace()
@@ -154,16 +153,12 @@ object CommandHandler {
         HelpCommand.register()
     }
 
-    fun setup(jda: JDA, options: Options) {
-        this.jda = jda
-        this.options = options
+    fun setup(options: Options) {
+        this.prefix = options.prefix
 
         registerListener()
         registerDefaults()
     }
 
-    data class Options(val prefix: String, val ownerId: String, val staff: List<String> = emptyList()) {
-        val owner: User
-            get() = jda.getUserById(ownerId)
-    }
+    data class Options(val prefix: String)
 }

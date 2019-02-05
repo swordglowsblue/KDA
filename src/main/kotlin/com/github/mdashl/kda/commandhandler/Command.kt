@@ -1,10 +1,13 @@
 package com.github.mdashl.kda.commandhandler
 
+import com.github.mdashl.kda.KDA
+import com.github.mdashl.kda.KDA.jda
 import com.github.mdashl.kda.builders.EmbedBuilder
-import com.github.mdashl.kda.commandhandler.CommandHandler.jda
 import com.github.mdashl.kda.commandhandler.annotations.GeneralCommand
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
 import com.github.mdashl.kda.embed
+import com.github.mdashl.kda.extensions.i18n
+import com.github.mdashl.kda.extensions.placeholder
 import net.dv8tion.jda.api.entities.*
 import java.lang.reflect.Method
 
@@ -13,9 +16,9 @@ abstract class Command {
     abstract val description: String
     abstract val usage: String
 
-    open val sendTyping: Boolean = false
+    val name by lazy { aliases[0] }
 
-    val mainAlias: String by lazy { aliases[0] }
+    open val sendTyping: Boolean = false
 
     lateinit var guild: Guild
     lateinit var member: Member
@@ -45,21 +48,35 @@ abstract class Command {
 
     fun replyHelp() {
         reply {
-            title("Command $mainAlias")
+            title(
+                "commandhandler.reply.help.title".i18n()
+                    .placeholder("name", name)
+            )
             thumbnail(jda.selfUser.effectiveAvatarUrl)
             field {
-                name("Description")
-                value(description)
+                name("commandhandler.reply.help.fields.description.name".i18n())
+                value(
+                    "commandhandler.reply.help.fields.description.value".i18n()
+                        .placeholder("description", description)
+                )
                 inline(false)
             }
             field {
-                name("Aliases")
-                value(aliases.joinToString())
+                name("commandhandler.reply.help.fields.aliases.name".i18n())
+                value(
+                    "commandhandler.reply.help.fields.aliases.value".i18n()
+                        .placeholder("aliases", aliases.joinToString())
+                )
                 inline(false)
             }
             field {
-                name("Usage")
-                value("`${CommandHandler.options.prefix}$mainAlias $usage`")
+                name("commandhandler.reply.help.fields.usage.name".i18n())
+                value(
+                    "commandhandler.reply.help.fields.usage.value".i18n()
+                        .placeholder("prefix", CommandHandler.prefix)
+                        .placeholder("name", name)
+                        .placeholder("usage", usage)
+                )
                 inline(false)
             }
         }
@@ -67,18 +84,27 @@ abstract class Command {
 
     fun replyError(error: String) {
         reply {
-            title("Error")
-            description(error)
+            title("commandhandler.reply.error.title".i18n())
+            description(
+                "commandhandler.reply.error.description".i18n()
+                    .placeholder("error", error)
+            )
             color(204, 0, 0)
         }
     }
 
     fun replyUncaughtException(exception: Throwable) {
         reply {
-            title("Uncaught Exception")
-            description(exception.toString())
+            title("commandhandler.reply.uncaughtexception.title".i18n())
+            description(
+                "commandhandler.reply.uncaughtexception.description".i18n()
+                    .placeholder("exception", exception.toString())
+            )
             footer {
-                text("Report this to ${CommandHandler.options.owner.asTag}")
+                text(
+                    "commandhandler.reply.uncaughtexception.footer".i18n()
+                        .placeholder("owner", KDA.owner.asTag)
+                )
             }
             color(204, 0, 0)
         }

@@ -1,5 +1,7 @@
 package com.github.mdashl.kda.commandhandler
 
-abstract class OwnerCommand : Command() {
-    override fun checkPermission(): Boolean = member.user.id == CommandHandler.options.ownerId
+import com.github.mdashl.kda.KDA
+
+abstract class OwnerCommand : StaffCommand() {
+    override fun checkPermission(): Boolean = member.user.id == KDA.owner.id
 }
