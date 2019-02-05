@@ -2,9 +2,10 @@ package com.github.mdashl.kda.commandhandler.contexts
 
 import com.github.mdashl.kda.commandhandler.CommandContext
 import com.github.mdashl.kda.extensions.isLong
+import net.dv8tion.jda.api.entities.Message
 
 object LongContext : CommandContext<Long>(Long::class.java) {
-    override fun handle(arg: String): Long {
+    override fun handle(message: Message, arg: String): Long {
         if (!arg.isLong()) {
             throw IllegalArgumentException("Not a number")
         }

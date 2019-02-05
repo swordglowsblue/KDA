@@ -2,10 +2,7 @@ package com.github.mdashl.kda.commandhandler
 
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
 import com.github.mdashl.kda.commandhandler.commands.HelpCommand
-import com.github.mdashl.kda.commandhandler.contexts.BooleanContext
-import com.github.mdashl.kda.commandhandler.contexts.IntContext
-import com.github.mdashl.kda.commandhandler.contexts.LongContext
-import com.github.mdashl.kda.commandhandler.contexts.StringContext
+import com.github.mdashl.kda.commandhandler.contexts.*
 import com.github.mdashl.kda.extensions.containsIgnoreCase
 import com.github.mdashl.kda.extensions.handlerOf
 import com.github.mdashl.kda.extensions.removeDoubleSpaces
@@ -104,7 +101,7 @@ object CommandHandler {
 
         GlobalScope.launch(POOL) {
             try {
-                method.invoke(command, *getCommandParameters(method, args.drop(offset.toInt())))
+                method.invoke(command, *getCommandParameters(command, method, args.drop(offset.toInt())))
             } catch (exception: Throwable) {
                 handleCommandException(command, exception)
             }
@@ -112,14 +109,14 @@ object CommandHandler {
     }
 
     @Throws(IllegalArgumentException::class)
-    private fun getCommandParameters(method: Method, args: List<String>): Array<*> {
+    private fun getCommandParameters(command: Command, method: Method, args: List<String>): Array<*> {
         return method.parameters.mapIndexed { index, parameter ->
             val type = parameter.type
             val arg = args[index]
 
             val context = getCommandContext(type)
 
-            context.handle(arg)
+            context.handle(command.message, arg)
         }.toTypedArray()
     }
 
@@ -150,6 +147,7 @@ object CommandHandler {
         IntContext.register()
         LongContext.register()
         BooleanContext.register()
+        MemberContext.register()
     }
 
     private fun registerDefaultCommands() {
