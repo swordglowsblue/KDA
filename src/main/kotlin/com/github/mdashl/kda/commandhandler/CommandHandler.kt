@@ -24,6 +24,7 @@ object CommandHandler {
 
     lateinit var prefix: String
     var defaultColor: Color? = null
+    lateinit var errorColor: Color
 
     val commands: ArrayList<Command> = ArrayList()
     val contexts: ArrayList<CommandContext<*>> = ArrayList()
@@ -123,7 +124,8 @@ object CommandHandler {
     private fun handleCommandException(command: Command, exception: Throwable) {
         when (exception) {
             is IllegalArgumentException -> {
-                exception.cause?.let { handleCommandException(command, it) }
+                exception.cause
+                    ?.let { handleCommandException(command, it) }
                     ?: command.replyError(exception.message.toString())
             }
             is InsufficientPermissionException -> command.reply(
@@ -160,6 +162,7 @@ object CommandHandler {
     fun setup(options: Options) {
         this.prefix = options.prefix
         this.defaultColor = options.defaultColor
+        this.errorColor = options.errorColor
 
         registerListener()
         registerDefaults()
@@ -167,6 +170,7 @@ object CommandHandler {
 
     data class Options(
         val prefix: String,
-        val defaultColor: Color? = null
+        val defaultColor: Color? = null,
+        val errorColor: Color = Color(204, 0, 0)
     )
 }

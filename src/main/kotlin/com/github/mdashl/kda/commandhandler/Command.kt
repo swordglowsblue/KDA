@@ -42,7 +42,7 @@ abstract class Command {
     }
 
     inline fun reply(init: EmbedBuilder.() -> Unit) {
-        reply(EmbedBuilder().apply(init).apply { CommandHandler.defaultColor?.let { color(it) } }.build())
+        reply(EmbedBuilder().apply { CommandHandler.defaultColor?.let { color(it) } }.apply(init).build())
     }
 
     fun replyHelp() {
@@ -88,7 +88,7 @@ abstract class Command {
                 "commandhandler.reply.error.description".i18n()
                     .placeholder("error", error)
             )
-            color(204, 0, 0)
+            color(CommandHandler.errorColor)
         }
     }
 
@@ -105,7 +105,7 @@ abstract class Command {
                         .placeholder("owner", KDA.owner.asTag)
                 )
             }
-            color(204, 0, 0)
+            color(CommandHandler.errorColor)
         }
     }
 
