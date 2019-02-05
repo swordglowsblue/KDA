@@ -153,6 +153,7 @@ object CommandHandler {
         LongContext.register()
         BooleanContext.register()
         MemberContext.register()
+        TextChannelContext.register()
     }
 
     private fun registerDefaultCommands() {
