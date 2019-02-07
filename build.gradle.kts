@@ -1,12 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.20"
+    kotlin("jvm") version "1.3.21"
     `maven-publish`
 }
 
 group = "com.github.mdashl"
-version = "3.0.6"
+version = "3.0.7"
 
 repositories {
     jcenter()
