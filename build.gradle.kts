@@ -2,11 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.3.21"
+    id("com.jfrog.bintray") version "1.8.4"
     `maven-publish`
 }
 
 group = "com.github.mdashl"
-version = "3.0.7"
+version = "3.1.0"
 
 repositories {
     jcenter()
@@ -15,7 +16,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
-    implementation("net.dv8tion:JDA:4.ALPHA.0_30") {
+    implementation("net.dv8tion:JDA:4.ALPHA.0_33") {
         exclude(module = "opus-java")
     }
     implementation("ch.qos.logback:logback-classic:1.2.3")
@@ -27,21 +28,22 @@ tasks.withType<KotlinCompile> {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("BintrayRelease") {
             from(components["java"])
         }
     }
+}
 
-    repositories {
-        maven("https://gitlab.com/api/v4/projects/10590152/packages/maven") {
-            credentials(HttpHeaderCredentials::class) {
-                name = "Job-Token"
-                value = System.getenv("CI_JOB_TOKEN")
-            }
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_API_KEY")
+    setPublications("BintrayRelease")
 
-            authentication {
-                create<HttpHeaderAuthentication>("header")
-            }
-        }
+    with(pkg) {
+        repo = "maven"
+        name = "KDA"
+        setLicenses("MIT")
+        vcsUrl = "https://gitlab.com/mdashlw/kda.git"
+        publish = true
     }
 }
