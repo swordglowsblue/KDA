@@ -1,6 +1,9 @@
-# KDA [![Download](https://api.bintray.com/packages/mdashlw/maven/KDA/images/download.svg) ](https://bintray.com/mdashlw/maven/KDA/_latestVersion) [![Pipeline status](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
+ [ ![Download](https://api.bintray.com/packages/mdashlw/maven/KDA/images/download.svg) ](https://bintray.com/mdashlw/maven/KDA/_latestVersion)
+ [![Pipeline status](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
 
-JDA Utilities for Kotlin.
+# Kotlin Discord API
+
+Kotlin utilities for JDA library.
 
 ## Importing
 
