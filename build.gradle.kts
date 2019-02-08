@@ -46,7 +46,7 @@ publishing {
 
             pom {
                 name.set("KDA")
-                description.set("Kotlin utilities for Java Discord API (JDA) Library")
+                description.set("Kotlin utilities for JDA library")
                 licenses {
                     license {
                         name.set("MIT License")
@@ -73,11 +73,16 @@ bintray {
     key = System.getenv("BINTRAY_API_KEY")
     setPublications("BintrayRelease")
 
+    publish = true
+    override = true
+
     with(pkg) {
         repo = "maven"
         name = "KDA"
+        desc = "Kotlin utilities for JDA library"
         setLicenses("MIT")
+        websiteUrl = "https://gitlab.com/mdashlw/kda"
+        issueTrackerUrl = "https://gitlab.com/mdashlw/kda/issues"
         vcsUrl = "https://gitlab.com/mdashlw/kda.git"
-        publish = true
     }
 }
