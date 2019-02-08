@@ -40,9 +40,31 @@ tasks.register<Jar>("javadocJar") {
 publishing {
     publications {
         create<MavenPublication>("BintrayRelease") {
+        	artifactId = "KDA"
             from(components["java"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
+
+            pom {
+                name.set("KDA")
+                description.set("Kotlin utilities for Java Discord API (JDA) Library")
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("mdashlw")
+                        name.set("Mdashlw")
+                        email.set("mdashlw@gmail.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:https://gitlab.com/mdashlw/kda.git")
+                }
+            }
         }
     }
 }
