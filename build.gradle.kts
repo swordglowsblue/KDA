@@ -4,10 +4,11 @@ plugins {
     kotlin("jvm") version "1.3.21"
     id("com.jfrog.bintray") version "1.8.4"
     `maven-publish`
+    signing
 }
 
 group = "com.github.mdashl"
-version = "3.1.0"
+version = "3.1.1"
 
 repositories {
     jcenter()
@@ -26,12 +27,28 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
+tasks.register<Jar>("sourcesJar") {
+    from(sourceSets.main.get().allSource)
+    archiveClassifier.set("sources")
+}
+
+tasks.register<Jar>("javadocJar") {
+    from(tasks.javadoc)
+    archiveClassifier.set("javadoc")
+}
+
 publishing {
     publications {
         create<MavenPublication>("BintrayRelease") {
             from(components["java"])
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
         }
     }
+}
+
+signing {
+    sign(publishing.publications["BintrayRelease"])
 }
 
 bintray {
