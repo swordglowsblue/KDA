@@ -9,7 +9,7 @@ build:
     - ./gradlew build
 
 deploy:
-  stage: build
+  stage: deploy
   script:
     - ./gradlew publish
   artifacts:
