@@ -57,7 +57,7 @@ dependencies {
 
 ### JAR artifact
 
-You can download latest [artifact](https://gitlab.com/mdashlw/kda/pipelines) of build and add it to classpath of your project.
+You can download latest [artifact](https://bintray.com/mdashlw/maven/KDA/_latestVersion) of build and add it to classpath of your project.
 
 ## Getting Started
 
