@@ -4,7 +4,6 @@ plugins {
     kotlin("jvm") version "1.3.21"
     id("com.jfrog.bintray") version "1.8.4"
     `maven-publish`
-    signing
 }
 
 group = "com.github.mdashl"
@@ -67,10 +66,6 @@ publishing {
             }
         }
     }
-}
-
-signing {
-    sign(publishing.publications["BintrayRelease"])
 }
 
 bintray {
