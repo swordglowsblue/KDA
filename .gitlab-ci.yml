@@ -6,16 +6,10 @@ before_script:
 build:
   stage: build
   script:
-    - ./gradlew build
-
-deploy:
-  stage: deploy
-  script:
-    - ./gradlew publish
+    - ./gradlew bintrayUpload
   artifacts:
     paths:
       - build/libs/*.jar
 
 stages:
   - build
-  - deploy
