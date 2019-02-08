@@ -1,5 +1,6 @@
- [ ![Download](https://api.bintray.com/packages/mdashlw/maven/KDA/images/download.svg) ](https://bintray.com/mdashlw/maven/KDA/_latestVersion)
- [![Pipeline status](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
+ [![](https://img.shields.io/bintray/v/mdashlw/maven/KDA.svg?label=KDA&style=flat-square)](https://bintray.com/mdashlw/maven/KDA/_latestVersion)
+ [![](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+ [![](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
 
 # Kotlin Discord API
 
