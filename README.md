@@ -1,42 +1,42 @@
-# KDA [![Pipeline status](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
+# KDA [![Download](https://api.bintray.com/packages/mdashlw/maven/KDA/images/download.svg) ](https://bintray.com/mdashlw/maven/KDA/_latestVersion) [![Pipeline status](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
 
 JDA Utilities for Kotlin.
 
 ## Importing
+
+Replace `VERSION` with the latest version above.
 
 ### Maven
 
 ```xml
 <depedencies>
     <dependency>
-        <artifactId>kda</artifactId>
+        <artifactId>KDA</artifactId>
         <groupId>com.github.mdashl</groupId>
         <scope>compile</scope>
-        <version>LATEST</version> 
+        <version>VERSION</version> 
   </dependency>
 </depedencies>
 
 <repositories>
     <repository>
-        <id>gitlab-maven</id>
-        <url>https://gitlab.com/api/v4/projects/10590152/packages/maven</url>
+      <id>jcenter</id>
+      <url>https://jcenter.bintray.com/</url>
     </repository>
 </repositories>
 ```
 
 ### Gradle
 
-Replace `LATEST_VERSION` with latest version
-
 **Groovy DSL**:
 
 ```gradle
 repositories {
-    maven { url 'https://gitlab.com/api/v4/projects/10590152/packages/maven' }
+    jcenter()
 }
 
 dependencies {
-    implementation 'com.github.mdashl:kda:LATEST_VERSION'
+    implementation 'com.github.mdashl:KDA:VERSION'
 }
 ```
 
@@ -44,11 +44,11 @@ dependencies {
 
 ```kotlin
 repositories {
-    maven("https://gitlab.com/api/v4/projects/10590152/packages/maven")
+    jcenter()
 }
 
 dependencies {
-    implementation("com.github.mdashl:kda:LATEST_VERSION")
+    implementation("com.github.mdashl:KDA:VERSION")
 }
 ```
 
