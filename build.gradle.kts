@@ -40,17 +40,18 @@ publishing {
     publications {
         create<MavenPublication>("BintrayRelease") {
         	artifactId = "KDA"
+
             from(components["java"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
 
             pom {
                 name.set("KDA")
-                description.set("Kotlin utilities for JDA library")
+                description.set("Kotlin-specific features for JDA (Java Discord API)")
                 licenses {
                     license {
                         name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
+                        url.set("https://choosealicense.com/licenses/mit/")
                     }
                 }
                 developers {
@@ -79,7 +80,7 @@ bintray {
     with(pkg) {
         repo = "maven"
         name = "KDA"
-        desc = "Kotlin utilities for JDA library"
+        desc = "Kotlin-specific features for JDA (Java Discord API)"
         setLicenses("MIT")
         websiteUrl = "https://gitlab.com/mdashlw/kda"
         issueTrackerUrl = "https://gitlab.com/mdashlw/kda/issues"
