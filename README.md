@@ -2,9 +2,9 @@
  [![](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat-square)](https://opensource.org/licenses/MIT)
  [![](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
 
-# Kotlin Discord API
+# KDA (Kotlin Discord API)
 
-Kotlin utilities for JDA library.
+KDA provides Kotlin-specific features for JDA (Java Discord API).
 
 ## Importing
 
@@ -32,7 +32,7 @@ Replace `VERSION` with the latest version above.
 
 ### Gradle
 
-**Groovy DSL**:
+##### Groovy DSL
 
 ```gradle
 repositories {
@@ -44,7 +44,7 @@ dependencies {
 }
 ```
 
-**Kotlin DSL**:
+##### Kotlin DSL
 
 ```kotlin
 repositories {
@@ -56,32 +56,43 @@ dependencies {
 }
 ```
 
-### JAR artifact
+## Usage
 
-You can download latest [artifact](https://bintray.com/mdashlw/maven/KDA/_latestVersion) of build and add it to classpath of your project.
+### Getting Started
 
-## Getting Started
+To start using KDA, you need to setup it on the JDA object.
 
 ```kotlin
-jda.setupKDA(KDA.Options(owner = "OWNER ID", staff = listOf("STAFF", "IDS"), locale = Locale.US))
+jda.setupKDA(
+    KDA.Options(
+        owner = "OWNER ID",
+        staff = listOf("STAFF", "IDS"), // Optional, default is empty
+        locale = Locale.US // Optional, default is Locale.US
+    )
+)
 ``` 
 
-## Features
+### Command Handler
 
-### Modern Command Handler
-
-This API provides new Command Handler.
+KDA provides new simple Command Handler.
 
 #### Setup
 
 ```kotlin
-CommandHandler.setup(CommandHandler.Options(prefix = "!"))
+CommandHandler.setup(
+    CommandHandler.Options(
+        prefix = "-",
+        defaultColor = Color(146, 75, 245), // Optional, default is Discord's one
+        errorColor = Color(238, 40, 31), // Optional, default is [204, 0, 0]
+        displayStaffCommandsInHelp = false // Optional, default is false
+    )
+)
 ```
 
-#### Register Command
+#### Register a Command
 
 ```kotlin
-command.register()
+Command#register()
 ```
 
 #### Simple Command
@@ -91,9 +102,12 @@ object TestCommand : Command() {
     override val aliases: List<String> = listOf("test")
     override val description: String = "just test"
     override val usage: String = "some usage"
-    
-    // Available variables here: guild: Guild, member: Member, channel: TextChannel, message: Message
+    override val sendTyping: Boolean = true // Optional, default is false
+    override val displayInHelp: Boolean = false // Optional, default is true
 
+    // Available variables here: [guild: Guild, member: Member, channel: TextChannel, message: Message]
+
+    // The usage is !test
     @GeneralCommand
     fun test() {
         reply(
@@ -101,16 +115,19 @@ object TestCommand : Command() {
         )
     }
 
+    // The usage is !test blah true
     @GeneralCommand
     fun test(argument1: String, argument2: Boolean) {
         // ...
     }
 
+    // The usage is !test subcmd
     @SubCommand("subcmd")
     fun subcmd() {
         reply("empty subcmd")
     }
 
+    // The usage is !test subcmd2 37
     @SubCommand("subcmd2", "anotheralias")
     fun subcmd2(argument: Int) {
         reply("The number is $argument")
@@ -118,22 +135,16 @@ object TestCommand : Command() {
 }
 ```
 
-#### Simple Owner Command
+#### Staff Commands
 
-Only owner has access to the owner commands.
-
-```kotlin
-object SimpleOwnerCommand : OwnerCommand() {
-    // ...
-}
-```
-
-#### Simple Staff Command
-
-Only staff has access to the staff commands.
+To make commands staff/owner only, extend from **StaffCommand** or **OwnerCommand** either.
 
 ```kotlin
 object SimpleStaffCommand : StaffCommand() {
+    // ...
+}
+
+object SimpleOwnerCommand : OwnerCommand() {
     // ...
 }
 ```
@@ -142,10 +153,10 @@ object SimpleStaffCommand : StaffCommand() {
 
 Command Handler supports custom command contexts.
 
-##### Register Command Context
+##### Register a Command Context
 
 ```kotlin
-context.register()
+CommandContext#register()
 ```
 
 ##### Simple Command Context
@@ -160,11 +171,9 @@ object SimpleContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
 
 ### Modern JDA Builder
 
-This API provides new JDA Builder.
+KDA provides new modern JDA Builder.
 
 ```kotlin
-import com.github.mdashl.kda.jda
-
 val jda = jda("TOKEN_GOES_HERE") {
     setActivity(Activity.playing("with KDA"))
     // All methods from original JDABuilder
@@ -173,12 +182,9 @@ val jda = jda("TOKEN_GOES_HERE") {
 
 ### Modern Embed Builder
 
-This API provides new Embed Builder.
+KDA provides new modern Embed Builder.
 
 ```kotlin
-import com.github.mdashl.kda.embed
-import java.time.OffsetDateTime
-
 embed {
     title("Hello!")
     field {
@@ -188,6 +194,7 @@ embed {
     timestamp(OffsetDateTime.now())
     footer {
         text("That's a greeting message")
+        icon("url")
     }
 }
 ```
