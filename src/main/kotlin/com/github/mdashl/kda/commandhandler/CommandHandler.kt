@@ -20,23 +20,25 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 
 object CommandHandler {
+
     private val POOL = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
     lateinit var prefix: String
     var defaultColor: Color? = null
     lateinit var errorColor: Color
+    var displayStaffCommandsInHelp: Boolean = false
 
-    val commands: ArrayList<Command> = ArrayList()
-    val contexts: ArrayList<CommandContext<*>> = ArrayList()
+    val COMMANDS: ArrayList<Command> = ArrayList()
+    val CONTEXTS: ArrayList<CommandContext<*>> = ArrayList()
 
     private fun getCommand(message: String): Command? {
         val s = message.split(" ")[0]
 
-        return commands.find { command -> command.aliases.any { s.equals(prefix + it, true) } }
+        return COMMANDS.find { command -> command.aliases.any { s.equals(prefix + it, true) } }
     }
 
     private fun getCommandContext(type: Class<*>): CommandContext<*> =
-        contexts.find { it.type == type }
+        CONTEXTS.find { it.type == type }
             ?: throw IllegalArgumentException(
                 "commandhandler.no_command_context".i18n()
                     .placeholder("type", type.simpleName)
@@ -164,6 +166,7 @@ object CommandHandler {
         this.prefix = options.prefix
         this.defaultColor = options.defaultColor
         this.errorColor = options.errorColor
+        this.displayStaffCommandsInHelp = options.displayStaffCommandsInHelp
 
         registerListener()
         registerDefaults()
@@ -172,6 +175,8 @@ object CommandHandler {
     data class Options(
         val prefix: String,
         val defaultColor: Color? = null,
-        val errorColor: Color = Color(204, 0, 0)
+        val errorColor: Color = Color(204, 0, 0),
+        val displayStaffCommandsInHelp: Boolean = false
     )
+
 }

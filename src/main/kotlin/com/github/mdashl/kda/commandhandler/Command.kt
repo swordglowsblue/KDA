@@ -11,13 +11,14 @@ import net.dv8tion.jda.api.entities.*
 import java.lang.reflect.Method
 
 abstract class Command {
+
     abstract val aliases: List<String>
     abstract val description: String
     abstract val usage: String
+    open val sendTyping: Boolean = false
+    open val displayInHelp: Boolean = true
 
     val name by lazy { aliases[0] }
-
-    open val sendTyping: Boolean = false
 
     lateinit var guild: Guild
     lateinit var member: Member
@@ -30,8 +31,10 @@ abstract class Command {
         this::class.java.methods.filter { it.isAnnotationPresent(SubCommand::class.java) }
 
     fun register() {
-        CommandHandler.commands += this
+        CommandHandler.COMMANDS += this
     }
+
+    open fun checkPermission(): Boolean = true
 
     fun reply(message: String) {
         channel.sendMessage(message).queue()
@@ -109,5 +112,4 @@ abstract class Command {
         }
     }
 
-    open fun checkPermission(): Boolean = true
 }

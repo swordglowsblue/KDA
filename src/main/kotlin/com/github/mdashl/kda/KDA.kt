@@ -5,14 +5,19 @@ import net.dv8tion.jda.api.entities.User
 import java.util.*
 
 object KDA {
+
     lateinit var MESSAGES: ResourceBundle
         private set
 
     lateinit var jda: JDA
+        private set
 
     lateinit var owner: User
+        private set
     lateinit var staff: List<String>
+        private set
     lateinit var locale: Locale
+        private set
 
     fun setup(jda: JDA, options: Options) {
         this.jda = jda
@@ -29,4 +34,5 @@ object KDA {
         val staff: List<String> = emptyList(),
         val locale: Locale = Locale.US
     )
+
 }

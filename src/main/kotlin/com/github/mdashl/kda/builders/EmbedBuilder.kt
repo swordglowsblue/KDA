@@ -8,6 +8,7 @@ import java.awt.Color
 import java.time.OffsetDateTime
 
 class EmbedBuilder {
+
     private var url: String? = null
     private var title: String? = null
     private val description: StringBuilder = StringBuilder()
@@ -81,6 +82,7 @@ class EmbedBuilder {
         )
 
     class Author {
+
         private var name: String? = null
         private var url: String? = null
         private var icon: String? = null
@@ -98,9 +100,11 @@ class EmbedBuilder {
         }
 
         fun build(): MessageEmbed.AuthorInfo = MessageEmbed.AuthorInfo(name, url, icon, null)
+
     }
 
     class Footer {
+
         private var text: String? = null
         private var icon: String? = null
 
@@ -113,9 +117,11 @@ class EmbedBuilder {
         }
 
         fun build() = MessageEmbed.Footer(text, icon, null)
+
     }
 
     class Field {
+
         private var name: String = ZERO_WIDTH_SPACE
         private var value: String = ZERO_WIDTH_SPACE
         private var inline: Boolean = true
@@ -133,5 +139,7 @@ class EmbedBuilder {
         }
 
         fun build(): MessageEmbed.Field = MessageEmbed.Field(name, value, inline)
+
     }
+
 }

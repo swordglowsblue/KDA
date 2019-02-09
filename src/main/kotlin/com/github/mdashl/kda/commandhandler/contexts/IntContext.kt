@@ -6,11 +6,9 @@ import com.github.mdashl.kda.extensions.isInt
 import net.dv8tion.jda.api.entities.Message
 
 object IntContext : CommandContext<Int>(Int::class.java) {
-    override fun handle(message: Message, arg: String): Int {
-        if (!arg.isInt()) {
-            throw IllegalArgumentException("commandhandler.contexts.int.error".i18n())
-        }
 
-        return arg.toInt()
-    }
+    override fun handle(message: Message, arg: String): Int =
+        arg.takeIf { it.isInt() }?.toInt()
+            ?: throw IllegalArgumentException("commandhandler.contexts.int.error".i18n())
+
 }

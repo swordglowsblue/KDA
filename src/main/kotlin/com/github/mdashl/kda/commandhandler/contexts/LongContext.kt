@@ -6,11 +6,9 @@ import com.github.mdashl.kda.extensions.isLong
 import net.dv8tion.jda.api.entities.Message
 
 object LongContext : CommandContext<Long>(Long::class.java) {
-    override fun handle(message: Message, arg: String): Long {
-        if (!arg.isLong()) {
-            throw IllegalArgumentException("commandhandler.contexts.long.error".i18n())
-        }
 
-        return arg.toLong()
-    }
+    override fun handle(message: Message, arg: String): Long =
+        arg.takeIf { it.isLong() }?.toLong()
+            ?: throw IllegalArgumentException("commandhandler.contexts.long.error".i18n())
+
 }
