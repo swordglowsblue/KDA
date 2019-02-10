@@ -119,8 +119,8 @@ object CommandHandler {
             val arg = args[index]
 
             when (type) {
-                String::class.java -> arg
                 Text::class.java -> args.drop(index).joinToString(" ")
+                String::class.java -> arg
                 else -> getCommandContext(type).handle(command.message, arg)
             }
         }.toTypedArray()
