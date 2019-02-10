@@ -76,14 +76,14 @@ object CommandHandler {
             }
 
             val method =
-                command.subCommands.find { it.getAnnotation(SubCommand::class.java).value.containsIgnoreCase(args[0]) && it.parameterCount + 1 == args.size }
+                command.subCommands.find { it.getAnnotation(SubCommand::class.java).value.containsIgnoreCase(args[0]) && it.parameterCount + 1 <= args.size }
 
             method?.let {
                 invokeCommand(command, it, channel, args, true)
                 return@handlerOf
             }
 
-            invokeCommand(command, command.generalCommands.find { it.parameterCount == args.size }, channel, args)
+            invokeCommand(command, command.generalCommands.find { it.parameterCount <= args.size }, channel, args)
         }
     }
 

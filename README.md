@@ -132,6 +132,12 @@ object TestCommand : Command() {
     fun subcmd2(argument: Int) {
         reply("The number is $argument")
     }
+
+    // The usage is !test subcmd3 any text here
+    @SubCommand("subcmd3")
+    fun subcmd3(text: Text) {
+        reply("Your text: `$text`")
+    }
 }
 ```
 
