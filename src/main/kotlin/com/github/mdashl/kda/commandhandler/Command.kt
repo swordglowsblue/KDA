@@ -26,9 +26,13 @@ abstract class Command {
     lateinit var message: Message
 
     internal val generalCommands: List<Method> =
-        this::class.java.methods.filter { it.isAnnotationPresent(GeneralCommand::class.java) }
+        this::class.java.methods
+            .filter { it.isAnnotationPresent(GeneralCommand::class.java) }
+            .sortedByDescending { it.parameterCount }
     internal val subCommands: List<Method> =
-        this::class.java.methods.filter { it.isAnnotationPresent(SubCommand::class.java) }
+        this::class.java.methods
+            .filter { it.isAnnotationPresent(SubCommand::class.java) }
+            .sortedByDescending { it.parameterCount }
 
     fun register() {
         CommandHandler.COMMANDS += this
