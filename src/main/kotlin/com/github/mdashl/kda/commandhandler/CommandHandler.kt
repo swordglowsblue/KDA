@@ -1,6 +1,7 @@
 package com.github.mdashl.kda.commandhandler
 
 import com.github.mdashl.kda.KDA.jda
+import com.github.mdashl.kda.Text
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
 import com.github.mdashl.kda.commandhandler.commands.HelpCommand
 import com.github.mdashl.kda.commandhandler.contexts.*
@@ -117,9 +118,11 @@ object CommandHandler {
             val type = parameter.type
             val arg = args[index]
 
-            val context = getCommandContext(type)
-
-            context.handle(command.message, arg)
+            when (type) {
+                String::class.java -> arg
+                Text::class.java -> args.drop(index).joinToString(" ")
+                else -> getCommandContext(type).handle(command.message, arg)
+            }
         }.toTypedArray()
     }
 
@@ -150,7 +153,6 @@ object CommandHandler {
     }
 
     private fun registerDefaultContexts() {
-        StringContext.register()
         IntContext.register()
         LongContext.register()
         BooleanContext.register()
