@@ -116,12 +116,13 @@ object CommandHandler {
     private fun getCommandParameters(command: Command, method: Method, args: List<String>): Array<*> {
         return method.parameters.mapIndexed { index, parameter ->
             val type = parameter.type
+            val text = args.drop(index).joinToString(" ")
             val arg = args[index]
 
             when (type) {
-                Text::class.java -> args.drop(index).joinToString(" ")
+                Text::class.java -> text
                 String::class.java -> arg
-                else -> getCommandContext(type).handle(command.message, arg)
+                else -> getCommandContext(type).handle(command.message, text, arg)
             }
         }.toTypedArray()
     }

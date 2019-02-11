@@ -1,5 +1,6 @@
 package com.github.mdashl.kda.commandhandler.contexts
 
+import com.github.mdashl.kda.Text
 import com.github.mdashl.kda.commandhandler.CommandContext
 import com.github.mdashl.kda.extensions.i18n
 import com.github.mdashl.kda.extensions.isLong
@@ -8,7 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel
 
 object TextChannelContext : CommandContext<TextChannel>(TextChannel::class.java) {
 
-    override fun handle(message: Message, arg: String): TextChannel =
+    override fun handle(message: Message, text: Text, arg: String): TextChannel =
         message.mentionedChannels.firstOrNull()
             ?: arg.takeIf { it.isLong() }?.let { message.guild.getTextChannelById(it) }
             ?: message.guild.getTextChannelsByName(arg, true).firstOrNull()
