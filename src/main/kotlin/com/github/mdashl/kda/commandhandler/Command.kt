@@ -72,7 +72,7 @@ abstract class Command {
                 name = "commandhandler.reply.help.fields.usage.name".i18n()
                 value = "commandhandler.reply.help.fields.usage.value".i18n()
                     .placeholder("prefix", CommandHandler.prefix)
-                    .placeholder("name", name)
+                    .placeholder("name", this@Command.name)
                     .placeholder("usage", usage)
                 inline = false
             }
