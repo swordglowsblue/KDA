@@ -18,8 +18,8 @@ class ClientBuilder {
     var locale: Locale = Locale.US
     var commandhandler: CommandHandlerOptions? = null
 
+    var status: OnlineStatus = OnlineStatus.ONLINE
     var activity: Activity? = null
-    var status: OnlineStatus? = null
 
     inline fun commandhandler(init: CommandHandlerOptions.() -> Unit) {
         commandhandler = CommandHandlerOptions().apply(init)
@@ -28,8 +28,8 @@ class ClientBuilder {
     fun build(): JDA =
         JDABuilder(token)
             .apply {
-                setActivity(activity)
                 setStatus(status)
+                setActivity(activity)
             }
             .build()
             .awaitReady()
