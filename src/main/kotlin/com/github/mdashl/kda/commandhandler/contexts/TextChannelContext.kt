@@ -11,7 +11,7 @@ object TextChannelContext : CommandContext<TextChannel>(TextChannel::class.java)
 
     override fun handle(message: Message, text: Text, arg: String): TextChannel =
         message.mentionedChannels.firstOrNull()
-            ?: arg.takeIf { it.isLong() }?.let { message.guild.getTextChannelById(it) }
+            ?: arg.takeIf(String::isLong)?.let { message.guild.getTextChannelById(it) }
             ?: message.guild.getTextChannelsByName(arg, true).firstOrNull()
             ?: throw IllegalArgumentException("commandhandler.contexts.textchannel.error".i18n())
 

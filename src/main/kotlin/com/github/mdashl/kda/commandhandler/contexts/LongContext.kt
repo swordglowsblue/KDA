@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.Message
 object LongContext : CommandContext<Long>(Long::class.java) {
 
     override fun handle(message: Message, text: Text, arg: String): Long =
-        arg.takeIf { it.isLong() }?.toLong()
+        arg.takeIf(String::isLong)?.toLong()
             ?: throw IllegalArgumentException("commandhandler.contexts.long.error".i18n())
 
 }

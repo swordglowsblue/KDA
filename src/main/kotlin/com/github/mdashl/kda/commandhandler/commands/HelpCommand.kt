@@ -12,34 +12,26 @@ object HelpCommand : Command() {
 
     override val aliases: List<String> = listOf("help", "commands", "cmds")
     override val description: String = "commandhandler.commands.help.description".i18n()
-    override val usage: String = ""
+    override val usage: String = "commandhandler.commands.help.usage".i18n()
 
     @GeneralCommand
     fun help() {
         val commands = CommandHandler.COMMANDS.filter(Command::displayInHelp)
 
         reply {
-            title(
-                "commandhandler.commands.help.reply.title".i18n()
-                    .placeholder("bot", jda.selfUser.name)
-            )
-            description(
-                "commandhandler.commands.help.reply.description".i18n()
-                    .placeholder("prefix", CommandHandler.prefix)
-            )
+            title = "commandhandler.commands.help.reply.title".i18n()
+                .placeholder("bot", jda.selfUser.name)
+            description += "commandhandler.commands.help.reply.description".i18n()
+                .placeholder("prefix", CommandHandler.prefix)
             field {
-                name("commandhandler.commands.help.reply.fields.command.name".i18n())
-                value(
-                    "commandhandler.commands.help.reply.fields.command.value".i18n()
-                        .placeholder("commands", commands.joinToString("\n") { it.name })
-                )
+                name = "commandhandler.commands.help.reply.fields.command.name".i18n()
+                value = "commandhandler.commands.help.reply.fields.command.value".i18n()
+                    .placeholder("commands", commands.joinToString("\n") { it.name })
             }
             field {
-                name("commandhandler.commands.help.reply.fields.description.name".i18n())
-                value(
-                    "commandhandler.commands.help.reply.fields.description.value".i18n()
-                        .placeholder("commands", commands.joinToString("\n") { it.description })
-                )
+                name = "commandhandler.commands.help.reply.fields.description.name".i18n()
+                value = "commandhandler.commands.help.reply.fields.description.value".i18n()
+                    .placeholder("commands", commands.joinToString("\n") { it.description })
             }
         }
     }

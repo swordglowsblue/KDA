@@ -11,7 +11,7 @@ object MemberContext : CommandContext<Member>(Member::class.java) {
 
     override fun handle(message: Message, text: Text, arg: String): Member =
         message.mentionedMembers.firstOrNull()
-            ?: arg.takeIf { it.isLong() }?.let { message.guild.getMemberById(it) }
+            ?: arg.takeIf(String::isLong)?.let { message.guild.getMemberById(it) }
             ?: message.guild.getMembersByEffectiveName(arg, true).firstOrNull()
             ?: message.guild.getMembersByEffectiveName(text, true).firstOrNull()
             ?: throw IllegalArgumentException("commandhandler.contexts.member.error".i18n())

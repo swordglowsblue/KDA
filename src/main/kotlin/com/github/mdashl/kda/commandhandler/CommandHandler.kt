@@ -1,9 +1,10 @@
 package com.github.mdashl.kda.commandhandler
 
-import com.github.mdashl.kda.KDA.jda
+import com.github.mdashl.kda.KDA
 import com.github.mdashl.kda.Text
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
 import com.github.mdashl.kda.commandhandler.commands.HelpCommand
+import com.github.mdashl.kda.commandhandler.commands.RestartCommand
 import com.github.mdashl.kda.commandhandler.contexts.*
 import com.github.mdashl.kda.extensions.*
 import kotlinx.coroutines.GlobalScope
@@ -12,6 +13,7 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException
+import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.awt.Color
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
@@ -20,7 +22,7 @@ import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 
-object CommandHandler {
+object CommandHandler : ListenerAdapter() {
 
     private val POOL = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
@@ -31,6 +33,43 @@ object CommandHandler {
 
     val COMMANDS: ArrayList<Command> = ArrayList()
     val CONTEXTS: ArrayList<CommandContext<*>> = ArrayList()
+
+    fun setup(
+        prefix: String,
+        defaultColor: Color?,
+        errorColor: Color,
+        displayStaffCommandsInHelp: Boolean
+    ) {
+        this.prefix = prefix
+        this.defaultColor = defaultColor
+        this.errorColor = errorColor
+        this.displayStaffCommandsInHelp = displayStaffCommandsInHelp
+
+        registerListener()
+        registerDefaults()
+    }
+
+    private fun registerListener() {
+        KDA.jda.addEventListener(this)
+    }
+
+    private fun registerDefaults() {
+        registerDefaultContexts()
+        registerDefaultCommands()
+    }
+
+    private fun registerDefaultContexts() {
+        IntContext.register()
+        LongContext.register()
+        BooleanContext.register()
+        MemberContext.register()
+        TextChannelContext.register()
+    }
+
+    private fun registerDefaultCommands() {
+        HelpCommand.register()
+        RestartCommand.register()
+    }
 
     private fun getCommand(message: String): Command? {
         val s = message.split(" ")[0]
@@ -45,46 +84,45 @@ object CommandHandler {
                     .placeholder("type", type.simpleName)
             )
 
-    private fun registerListener() {
-        jda.handlerOf<GuildMessageReceivedEvent> { event ->
-            val message = event.message
-            val content = message.contentRaw.removeDoubleSpaces()
-            val command = getCommand(content) ?: return@handlerOf
-            val guild = event.guild
-            val member = event.member
-            val user = event.author
-            val channel = event.channel
-            val args = content.split(" ").drop(1)
+    override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
 
-            command.guild = guild
-            command.member = member
-            command.channel = channel
-            command.message = message
+        val message = event.message
+        val content = message.contentRaw.removeDoubleSpaces()
+        val command = getCommand(content) ?: return
+        val guild = event.guild
+        val member = event.member
+        val user = event.author
+        val channel = event.channel
+        val args = content.split(" ").drop(1)
 
-            if (user.isBot) {
-                return@handlerOf
-            }
+        command.guild = guild
+        command.member = member
+        command.channel = channel
+        command.message = message
 
-            if (!command.checkPermission()) {
-                command.replyError("commandhandler.user_no_permission".i18n())
-                return@handlerOf
-            }
-
-            if (args.isEmpty()) {
-                invokeCommand(command, command.generalCommands.find { it.parameterCount == 0 }, channel)
-                return@handlerOf
-            }
-
-            val method =
-                command.subCommands.find { it.getAnnotation(SubCommand::class.java).value.containsIgnoreCase(args[0]) && it.parameterCount + 1 <= args.size }
-
-            method?.let {
-                invokeCommand(command, it, channel, args, true)
-                return@handlerOf
-            }
-
-            invokeCommand(command, command.generalCommands.find { it.parameterCount <= args.size }, channel, args)
+        if (user.isBot) {
+            return
         }
+
+        if (!command.checkPermission()) {
+            command.replyError("commandhandler.user_no_permission".i18n())
+            return
+        }
+
+        if (args.isEmpty()) {
+            invokeCommand(command, command.generalCommands.find { it.parameterCount == 0 }, channel)
+            return
+        }
+
+        val method =
+            command.subCommands.find { it.getAnnotation(SubCommand::class.java).value.containsIgnoreCase(args[0]) && it.parameterCount + 1 <= args.size }
+
+        method?.let {
+            invokeCommand(command, it, channel, args, true)
+            return
+        }
+
+        invokeCommand(command, command.generalCommands.find { it.parameterCount <= args.size }, channel, args)
     }
 
     private fun invokeCommand(
@@ -117,12 +155,11 @@ object CommandHandler {
         return method.parameters.mapIndexed { index, parameter ->
             val type = parameter.type
             val text = args.drop(index).joinToString(" ")
-            val arg = args[index]
 
             when (type) {
                 Text::class.java -> text
-                String::class.java -> arg
-                else -> getCommandContext(type).handle(command.message, text, arg)
+                String::class.java -> args[index]
+                else -> getCommandContext(type).handle(command.message, text, args[index])
             }
         }.toTypedArray()
     }
@@ -147,39 +184,5 @@ object CommandHandler {
             }
         }
     }
-
-    private fun registerDefaults() {
-        registerDefaultContexts()
-        registerDefaultCommands()
-    }
-
-    private fun registerDefaultContexts() {
-        IntContext.register()
-        LongContext.register()
-        BooleanContext.register()
-        MemberContext.register()
-        TextChannelContext.register()
-    }
-
-    private fun registerDefaultCommands() {
-        HelpCommand.register()
-    }
-
-    fun setup(options: Options) {
-        this.prefix = options.prefix
-        this.defaultColor = options.defaultColor
-        this.errorColor = options.errorColor
-        this.displayStaffCommandsInHelp = options.displayStaffCommandsInHelp
-
-        registerListener()
-        registerDefaults()
-    }
-
-    data class Options(
-        val prefix: String,
-        val defaultColor: Color? = null,
-        val errorColor: Color = Color(204, 0, 0),
-        val displayStaffCommandsInHelp: Boolean = false
-    )
 
 }

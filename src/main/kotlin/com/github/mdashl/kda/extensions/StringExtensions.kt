@@ -22,7 +22,8 @@ fun String.isLong(): Boolean =
         false
     }
 
-fun String.isBoolean(): Boolean = equals("true", true) || equals("false", true)
+fun String.isBoolean(): Boolean =
+    equals("true", true) || equals("false", true)
 
 internal fun String.i18n(): String = KDA.MESSAGES.getString(this)
 

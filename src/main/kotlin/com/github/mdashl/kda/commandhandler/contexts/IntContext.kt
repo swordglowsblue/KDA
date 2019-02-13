@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.Message
 object IntContext : CommandContext<Int>(Int::class.java) {
 
     override fun handle(message: Message, text: Text, arg: String): Int =
-        arg.takeIf { it.isInt() }?.toInt()
+        arg.takeIf(String::isInt)?.toInt()
             ?: throw IllegalArgumentException("commandhandler.contexts.int.error".i18n())
 
 }

@@ -49,70 +49,55 @@ abstract class Command {
     }
 
     inline fun reply(init: EmbedBuilder.() -> Unit) {
-        reply(EmbedBuilder().apply { CommandHandler.defaultColor?.let { color(it) } }.apply(init).build())
+        reply(EmbedBuilder().apply { CommandHandler.defaultColor?.let { color = it } }.apply(init).build())
     }
 
     fun replyHelp() {
         reply {
-            title(
-                "commandhandler.reply.help.title".i18n()
+            title = "commandhandler.reply.help.title".i18n().placeholder("name", name)
+            thumbnail = jda.selfUser.effectiveAvatarUrl
+            field {
+                name = "commandhandler.reply.help.fields.description.name".i18n()
+                value = "commandhandler.reply.help.fields.description.value".i18n()
+                    .placeholder("description", this@Command.description)
+                inline = false
+            }
+            field {
+                name = "commandhandler.reply.help.fields.aliases.name".i18n()
+                value = "commandhandler.reply.help.fields.aliases.value".i18n()
+                    .placeholder("aliases", aliases.joinToString())
+                inline = false
+            }
+            field {
+                name = "commandhandler.reply.help.fields.usage.name".i18n()
+                value = "commandhandler.reply.help.fields.usage.value".i18n()
+                    .placeholder("prefix", CommandHandler.prefix)
                     .placeholder("name", name)
-            )
-            thumbnail(jda.selfUser.effectiveAvatarUrl)
-            field {
-                name("commandhandler.reply.help.fields.description.name".i18n())
-                value(
-                    "commandhandler.reply.help.fields.description.value".i18n()
-                        .placeholder("description", description)
-                )
-                inline(false)
-            }
-            field {
-                name("commandhandler.reply.help.fields.aliases.name".i18n())
-                value(
-                    "commandhandler.reply.help.fields.aliases.value".i18n()
-                        .placeholder("aliases", aliases.joinToString())
-                )
-                inline(false)
-            }
-            field {
-                name("commandhandler.reply.help.fields.usage.name".i18n())
-                value(
-                    "commandhandler.reply.help.fields.usage.value".i18n()
-                        .placeholder("prefix", CommandHandler.prefix)
-                        .placeholder("name", name)
-                        .placeholder("usage", usage)
-                )
-                inline(false)
+                    .placeholder("usage", usage)
+                inline = false
             }
         }
     }
 
     fun replyError(error: String) {
         reply {
-            title("commandhandler.reply.error.title".i18n())
-            description(
-                "commandhandler.reply.error.description".i18n()
-                    .placeholder("error", error)
-            )
-            color(CommandHandler.errorColor)
+            title = "commandhandler.reply.error.title".i18n()
+            description += "commandhandler.reply.error.description".i18n()
+                .placeholder("error", error)
+            color = CommandHandler.errorColor
         }
     }
 
     fun replyUncaughtException(exception: Throwable) {
         reply {
-            title("commandhandler.reply.uncaughtexception.title".i18n())
-            description(
-                "commandhandler.reply.uncaughtexception.description".i18n()
-                    .placeholder("exception", exception.toString())
-            )
+            title = "commandhandler.reply.uncaughtexception.title".i18n()
+            description += "commandhandler.reply.uncaughtexception.description".i18n()
+                .placeholder("exception", exception.toString())
             footer {
-                text(
-                    "commandhandler.reply.uncaughtexception.footer".i18n()
-                        .placeholder("owner", KDA.owner.asTag)
-                )
+                text = "commandhandler.reply.uncaughtexception.footer".i18n()
+                    .placeholder("owner", KDA.owner.asTag)
             }
-            color(CommandHandler.errorColor)
+            color = CommandHandler.errorColor
         }
     }
 

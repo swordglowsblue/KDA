@@ -9,59 +9,31 @@ import java.time.OffsetDateTime
 
 class EmbedBuilder {
 
-    private var url: String? = null
-    private var title: String? = null
-    private val description: StringBuilder = StringBuilder()
-    private var timestamp: OffsetDateTime? = null
-    private var color: Color? = null
-    private var thumbnail: String? = null
-    private var author: Author? = null
-    private var footer: Footer? = null
-    private var image: String? = null
-    private val fields: ArrayList<Field> = ArrayList()
+    var title: String? = null
+    val description: StringBuilder = StringBuilder()
+    var url: String? = null
+    var timestamp: OffsetDateTime? = null
+    var color: Color? = null
+    var thumbnail: String? = null
+    var author: Author? = null
+    var footer: Footer? = null
+    var image: String? = null
+    val fields: ArrayList<Field> = ArrayList()
 
-    fun url(url: String) {
-        this.url = url
+    operator fun StringBuilder.plusAssign(string: String) {
+        appendln(string)
     }
 
-    fun title(title: String) {
-        this.title = title
+    inline fun author(init: Author.() -> Unit) {
+        author = Author().apply(init)
     }
 
-    fun description(description: String) {
-        this.description.appendln(description)
+    inline fun footer(init: Footer.() -> Unit) {
+        footer = Footer().apply(init)
     }
 
-    fun timestamp(timestamp: OffsetDateTime) {
-        this.timestamp = timestamp
-    }
-
-    fun color(color: Color) {
-        this.color = color
-    }
-
-    fun color(red: Int, green: Int, blue: Int) {
-        color(Color(red, green, blue))
-    }
-
-    fun thumbnail(thumbnail: String) {
-        this.thumbnail = thumbnail
-    }
-
-    fun author(init: Author.() -> Unit) {
-        this.author = Author().apply(init)
-    }
-
-    fun footer(init: Footer.() -> Unit) {
-        this.footer = Footer().apply(init)
-    }
-
-    fun image(image: String) {
-        this.image = image
-    }
-
-    fun field(init: Field.() -> Unit) {
-        this.fields += Field().apply(init)
+    inline fun field(init: Field.() -> Unit) {
+        fields += Field().apply(init)
     }
 
     fun build(): MessageEmbed =
@@ -83,21 +55,9 @@ class EmbedBuilder {
 
     class Author {
 
-        private var name: String? = null
-        private var url: String? = null
-        private var icon: String? = null
-
-        fun name(name: String) {
-            this.name = name
-        }
-
-        fun url(url: String) {
-            this.url = url
-        }
-
-        fun icon(icon: String) {
-            this.icon = icon
-        }
+        var name: String? = null
+        var url: String? = null
+        var icon: String? = null
 
         fun build(): MessageEmbed.AuthorInfo = MessageEmbed.AuthorInfo(name, url, icon, null)
 
@@ -105,38 +65,18 @@ class EmbedBuilder {
 
     class Footer {
 
-        private var text: String? = null
-        private var icon: String? = null
+        var text: String? = null
+        var icon: String? = null
 
-        fun text(text: String) {
-            this.text = text
-        }
-
-        fun icon(icon: String) {
-            this.icon = icon
-        }
-
-        fun build() = MessageEmbed.Footer(text, icon, null)
+        fun build(): MessageEmbed.Footer = MessageEmbed.Footer(text, icon, null)
 
     }
 
     class Field {
 
-        private var name: String = ZERO_WIDTH_SPACE
-        private var value: String = ZERO_WIDTH_SPACE
-        private var inline: Boolean = true
-
-        fun name(name: String) {
-            this.name = name
-        }
-
-        fun value(value: String) {
-            this.value = value
-        }
-
-        fun inline(inline: Boolean) {
-            this.inline = inline
-        }
+        var name: String = ZERO_WIDTH_SPACE
+        var value: String = ZERO_WIDTH_SPACE
+        var inline: Boolean = true
 
         fun build(): MessageEmbed.Field = MessageEmbed.Field(name, value, inline)
 

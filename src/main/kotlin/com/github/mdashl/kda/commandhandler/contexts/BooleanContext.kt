@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.Message
 object BooleanContext : CommandContext<Boolean>(Boolean::class.java) {
 
     override fun handle(message: Message, text: Text, arg: String): Boolean =
-        arg.takeIf { it.isBoolean() }?.toBoolean()
+        arg.takeIf(String::isBoolean)?.toBoolean()
             ?: throw IllegalArgumentException("commandhandler.contexts.boolean.error".i18n())
 
 }

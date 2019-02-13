@@ -6,33 +6,29 @@ import java.util.*
 
 object KDA {
 
-    lateinit var MESSAGES: ResourceBundle
-        private set
-
     lateinit var jda: JDA
-        private set
 
-    lateinit var owner: User
-        private set
-    lateinit var staff: List<String>
-        private set
+    lateinit var ownerId: String
+    lateinit var staffIds: List<String>
     lateinit var locale: Locale
-        private set
 
-    fun setup(jda: JDA, options: Options) {
+    lateinit var MESSAGES: ResourceBundle
+
+    val owner: User
+        get() = jda.getUserById(ownerId)
+
+    fun setup(
+        jda: JDA,
+        ownerId: String,
+        staffIds: List<String>,
+        locale: Locale
+    ) {
         this.jda = jda
-
-        this.owner = jda.getUserById(options.owner)
-        this.staff = options.staff
-        this.locale = options.locale
+        this.ownerId = ownerId
+        this.staffIds = staffIds
+        this.locale = locale
 
         this.MESSAGES = ResourceBundle.getBundle("messages", locale)
     }
-
-    data class Options(
-        val owner: String,
-        val staff: List<String> = emptyList(),
-        val locale: Locale = Locale.US
-    )
 
 }

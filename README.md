@@ -10,26 +10,6 @@ KDA provides Kotlin-specific features for JDA (Java Discord API).
 
 Replace `VERSION` with the latest version above.
 
-### Maven
-
-```xml
-<depedencies>
-    <dependency>
-        <artifactId>KDA</artifactId>
-        <groupId>com.github.mdashl</groupId>
-        <scope>compile</scope>
-        <version>VERSION</version> 
-  </dependency>
-</depedencies>
-
-<repositories>
-    <repository>
-      <id>jcenter</id>
-      <url>https://jcenter.bintray.com/</url>
-    </repository>
-</repositories>
-```
-
 ### Gradle
 
 ##### Groovy DSL
@@ -56,37 +36,63 @@ dependencies {
 }
 ```
 
+### Maven
+
+```xml
+<depedencies>
+    <dependency>
+        <artifactId>KDA</artifactId>
+        <groupId>com.github.mdashl</groupId>
+        <scope>compile</scope>
+        <version>VERSION</version>
+  </dependency>
+</depedencies>
+
+<repositories>
+    <repository>
+      <id>jcenter</id>
+      <url>https://jcenter.bintray.com/</url>
+    </repository>
+</repositories>
+```
+
 ## Usage
 
-### Getting Started
-
-To start using KDA, you need to setup it on the JDA object.
+### Client Builder
 
 ```kotlin
-jda.setupKDA(
-    KDA.Options(
-        owner = "OWNER ID",
-        staff = listOf("STAFF", "IDS"), // Optional, default is empty
-        locale = Locale.US // Optional, default is Locale.US
-    )
-)
-``` 
+// Method returns JDA
+
+client {
+    // Required
+    token = "TOKEN"
+    owner = "OWNER_ID"
+
+    // KDA Optional
+    staff = listOf("STAFF_ID", "ANOTHER_STAFF_ID")
+    locale = Locale.US
+
+    // JDA Optional
+    activity = Activity.watching("your home")
+    status = OnlineStatus.IDLE
+}
+```
 
 ### Command Handler
 
-KDA provides new simple Command Handler.
-
-#### Setup
-
 ```kotlin
-CommandHandler.setup(
-    CommandHandler.Options(
-        prefix = "-",
-        defaultColor = Color(146, 75, 245), // Optional, default is Discord's one
-        errorColor = Color(238, 40, 31), // Optional, default is [204, 0, 0]
-        displayStaffCommandsInHelp = false // Optional, default is false
-    )
-)
+client {
+    // ...
+
+    commandhandler {
+        token = "/"
+
+        // Optional
+        defaultColor = Color(146, 75, 245) // Default - Discord's gray
+        errorColor = Color(238, 40, 31) // Default - [204, 0, 0]
+        displayStaffCommandsInHelp = false // Default - false
+    }
+}
 ```
 
 #### Register a Command
@@ -99,13 +105,24 @@ Command#register()
 
 ```kotlin
 object TestCommand : Command() {
+
     override val aliases: List<String> = listOf("test")
     override val description: String = "just test"
     override val usage: String = "some usage"
-    override val sendTyping: Boolean = true // Optional, default is false
-    override val displayInHelp: Boolean = false // Optional, default is true
 
-    // Available variables here: [guild: Guild, member: Member, channel: TextChannel, message: Message]
+    // Optional
+    override val sendTyping: Boolean = true // Default - false
+    override val displayInHelp: Boolean = false // Default - true
+
+    /*
+        Available variables here:
+            [guild: Guild, member: Member, channel: TextChannel, message: Message]
+    */
+
+    // Optional
+    override fun checkPermission(): Boolean {
+        // ...
+    }
 
     // The usage is !test
     @GeneralCommand
@@ -138,26 +155,28 @@ object TestCommand : Command() {
     fun subcmd3(text: Text) {
         reply("Your text: `$text`")
     }
+
 }
 ```
 
 #### Staff Commands
 
-To make commands staff/owner only, extend from **StaffCommand** or **OwnerCommand** either.
+To make commands staff/owner only, extend from **StaffCommand** / **OwnerCommand**.
 
 ```kotlin
 object SimpleStaffCommand : StaffCommand() {
     // ...
 }
 
+```
+
+```kotlin
 object SimpleOwnerCommand : OwnerCommand() {
     // ...
 }
 ```
 
 #### Command Contexts
-
-Command Handler supports custom command contexts.
 
 ##### Register a Command Context
 
@@ -175,32 +194,55 @@ object SimpleContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
 }
 ```
 
-### Modern JDA Builder
-
-KDA provides new modern JDA Builder.
-
-```kotlin
-val jda = jda("TOKEN_GOES_HERE") {
-    setActivity(Activity.playing("with KDA"))
-    // All methods from original JDABuilder
-}
-```
-
 ### Modern Embed Builder
-
-KDA provides new modern Embed Builder.
 
 ```kotlin
 embed {
-    title("Hello!")
+    title = "Hello!"
+    description += "test"
     field {
-        name("Hello, world")
-        value("**Hello, world!**")
+        name = "Hello, world"
+        value = "**Hello, world!**"
     }
-    timestamp(OffsetDateTime.now())
+    timestamp = OffsetDateTime.now()
     footer {
-        text("That's a greeting message")
-        icon("url")
+        text = "That's a greeting message"
+        icon = "url"
+    }
+}
+```
+
+### Extensions
+
+#### JDA
+
+```kotlin
+JDA#handlerOf<GuildMessageReactionAddEvent> { event ->
+    // ...
+}
+```
+
+#### User
+
+```kotlin
+User#isOwner()
+```
+
+```kotlin
+User#isStaff()
+```
+
+#### Text Channel
+
+```kotlin
+// Extension returns MessageAction, so `.queue()` is still required.
+
+TextChannel#send("Content") {
+    // Embed Builder
+
+    title = "test"
+    field {
+        // ...
     }
 }
 ```

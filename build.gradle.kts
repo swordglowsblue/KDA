@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.mdashl"
-version = "3.2.5"
+version = "4.0.0-SNAPSHOT"
 
 repositories {
     jcenter()
@@ -16,7 +16,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
-    implementation("net.dv8tion:JDA:4.ALPHA.0_34") {
+    implementation("net.dv8tion:JDA:4.ALPHA.0_40") {
         exclude(module = "opus-java")
     }
     implementation("ch.qos.logback:logback-classic:1.2.3")
