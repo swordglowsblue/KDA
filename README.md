@@ -85,7 +85,7 @@ client {
     // ...
 
     commandhandler {
-        token = "/"
+        prefix = "/"
 
         // Optional
         defaultColor = Color(146, 75, 245) // Default - Discord's gray
@@ -216,6 +216,10 @@ embed {
 
 #### JDA
 
+###### JDA#handlerOf
+
+Registers a listener of an event.
+
 ```kotlin
 JDA#handlerOf<GuildMessageReactionAddEvent> { event ->
     // ...
@@ -224,9 +228,17 @@ JDA#handlerOf<GuildMessageReactionAddEvent> { event ->
 
 #### User
 
+###### User#isOwner
+
+Returns true if a user is **an owner** and false if they are not.
+
 ```kotlin
 User#isOwner()
 ```
+
+###### User#isStaff
+
+Returns true if a user is **staff** and false if they are not.
 
 ```kotlin
 User#isStaff()
@@ -234,9 +246,14 @@ User#isStaff()
 
 #### Text Channel
 
-```kotlin
-// Extension returns MessageAction, so `.queue()` is still required.
+###### TextChannel#send
 
+Better sendMessage method.
+Content is optional.
+
+**Note**: Extension returns MessageAction, so `.queue()` is still required.
+
+```kotlin
 TextChannel#send("Content") {
     // Embed Builder
 
