@@ -188,7 +188,7 @@ CommandContext#register()
 
 ```kotlin
 object SimpleContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
-    override fun handle(message: Message, text: Text, arg: String): MyCustomType {
+    override fun handle(message: Message, text: String, arg: String): MyCustomType {
         // ...
     }
 }
