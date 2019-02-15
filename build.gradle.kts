@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.mdashl"
-version = "4.0.2"
+version = "4.1.0"
 
 repositories {
     jcenter()

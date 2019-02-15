@@ -1,7 +1,7 @@
 package com.github.mdashl.kda.commandhandler
 
 import com.github.mdashl.kda.KDA
-import com.github.mdashl.kda.Text
+import com.github.mdashl.kda.annotations.Text
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
 import com.github.mdashl.kda.commandhandler.commands.HelpCommand
 import com.github.mdashl.kda.commandhandler.commands.RestartCommand
@@ -151,18 +151,16 @@ object CommandHandler : ListenerAdapter() {
     }
 
     @Throws(IllegalArgumentException::class)
-    private fun getCommandParameters(command: Command, method: Method, args: List<String>): Array<*> {
-        return method.parameters.mapIndexed { index, parameter ->
+    private fun getCommandParameters(command: Command, method: Method, args: List<String>): Array<*> =
+        method.parameters.mapIndexed { index, parameter ->
             val type = parameter.type
             val text = args.drop(index).joinToString(" ")
 
             when (type) {
-                Text::class.java -> text
-                String::class.java -> args[index]
+                String::class.java -> if (parameter.isAnnotationPresent(Text::class.java)) text else args[index]
                 else -> getCommandContext(type).handle(command.message, text, args[index])
             }
         }.toTypedArray()
-    }
 
     private fun handleCommandException(command: Command, exception: Throwable) {
         when (exception) {

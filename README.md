@@ -152,7 +152,7 @@ object TestCommand : Command() {
 
     // The usage is !test subcmd3 any text here
     @SubCommand("subcmd3")
-    fun subcmd3(text: Text) {
+    fun subcmd3(@Text text: String) {
         reply("Your text: `$text`")
     }
 
