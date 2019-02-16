@@ -101,7 +101,7 @@ client {
 Command#register()
 ```
 
-#### Simple Command
+#### Example Command
 
 ```kotlin
 object TestCommand : Command() {
@@ -156,6 +156,20 @@ object TestCommand : Command() {
         reply("Your text: `$text`")
     }
 
+    // The usage is !test subcmd4 @member OR !test subcmd4 member's name
+    // Note: name variable target, member is already declared in Command class
+    @SubCommand("subcmd4")
+    fun subcmd4(target: Member) {
+        // ...
+    }
+
+    // The usage is !test subcmd5 somevalueidk
+    // See Command Contexts for custom types deserialization
+    @SubCommand("subcmd5")
+    fun subcmd5(myCustomType: MyCustomType) {
+        // ...
+    }
+
 }
 ```
 
@@ -184,13 +198,15 @@ object SimpleOwnerCommand : OwnerCommand() {
 CommandContext#register()
 ```
 
-##### Simple Command Context
+##### Example Command Context
 
 ```kotlin
 object SimpleContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
+
     override fun handle(message: Message, text: String, arg: String): MyCustomType {
         // ...
     }
+
 }
 ```
 
@@ -199,7 +215,7 @@ object SimpleContext : CommandContext<MyCustomType>(MyCustomType::class.java) {
 ```kotlin
 embed {
     title = "Hello!"
-    description += "test"
+    description += "test" // Note: +=
     field {
         name = "Hello, world"
         value = "**Hello, world!**"
@@ -212,6 +228,18 @@ embed {
 }
 ```
 
+### Event Waiter
+
+Event Waiter will handle every instance of this event until predicate is complete and action is executed.
+
+```kotlin
+// When JDA receive a message from user with ID `1234567890123` in channel `0123456780123`,
+// it will execute the action and stop listening to an event.
+JDA#wait<GuildMessageReceivedEvent>({ author.id == "1234567890123" && channel.id == "0123456780123" }) {
+    // ...
+}
+```
+
 ### Extensions
 
 #### JDA
@@ -219,6 +247,8 @@ embed {
 ###### JDA#handlerOf
 
 Registers a listener of an event.
+
+**Note**: It's still recommended to implement `ListenerAdapter`, use this extension for very simple listeners.
 
 ```kotlin
 JDA#handlerOf<GuildMessageReactionAddEvent> { event ->
@@ -251,7 +281,7 @@ User#isStaff()
 Better sendMessage method.
 Content is optional.
 
-**Note**: Extension returns MessageAction, so `.queue()` is still required.
+**Note**: Extension returns `MessageAction`, so `.queue()` is still required.
 
 ```kotlin
 TextChannel#send("Content") {
@@ -266,4 +296,4 @@ TextChannel#send("Content") {
 
 ## License
 
-The project is under [MIT license](https://gitlab.com/mdashlw/kda/blob/master/LICENSE).
+The project is licensed under [the MIT license](https://gitlab.com/mdashlw/kda/blob/master/LICENSE).
