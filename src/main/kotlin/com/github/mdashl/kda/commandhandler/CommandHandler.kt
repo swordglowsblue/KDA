@@ -4,6 +4,7 @@ import com.github.mdashl.kda.KDA
 import com.github.mdashl.kda.annotations.Text
 import com.github.mdashl.kda.commandhandler.annotations.SubCommand
 import com.github.mdashl.kda.commandhandler.commands.HelpCommand
+import com.github.mdashl.kda.commandhandler.commands.InviteCommand
 import com.github.mdashl.kda.commandhandler.commands.RestartCommand
 import com.github.mdashl.kda.commandhandler.contexts.*
 import com.github.mdashl.kda.extensions.*
@@ -69,6 +70,11 @@ object CommandHandler : ListenerAdapter() {
     private fun registerDefaultCommands() {
         HelpCommand.register()
         RestartCommand.register()
+        KDA.jda.applicationInfo.queue {
+            if (it.isBotPublic) {
+                InviteCommand.register()
+            }
+        }
     }
 
     private fun getCommand(message: String): Command? {

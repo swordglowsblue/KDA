@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.mdashl"
-version = "4.2.0"
+version = "4.3.0"
 
 repositories {
     jcenter()
@@ -39,7 +39,7 @@ tasks.register<Jar>("javadocJar") {
 publishing {
     publications {
         create<MavenPublication>("BintrayRelease") {
-        	artifactId = "KDA"
+            artifactId = "KDA"
 
             from(components["java"])
             artifact(tasks["sourcesJar"])
