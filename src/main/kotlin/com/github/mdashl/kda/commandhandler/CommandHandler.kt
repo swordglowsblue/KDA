@@ -70,7 +70,7 @@ object CommandHandler : ListenerAdapter() {
     private fun registerDefaultCommands() {
         HelpCommand.register()
         RestartCommand.register()
-        KDA.jda.applicationInfo.queue {
+        KDA.jda.retrieveApplicationInfo().queue {
             if (it.isBotPublic) {
                 InviteCommand.register()
             }

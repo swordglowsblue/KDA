@@ -12,7 +12,7 @@ object InviteCommand : Command() {
     override val description: String = "commandhandler.commands.invite.description".i18n()
     override val usage: String = "commandhandler.commands.invite.usage".i18n()
 
-    private val INVITE_LINK by lazy { KDA.jda.applicationInfo.complete().getInviteUrl() }
+    private val INVITE_LINK by lazy { KDA.jda.retrieveApplicationInfo().complete().getInviteUrl() }
 
     @GeneralCommand
     fun invite() {
