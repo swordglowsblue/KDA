@@ -62,7 +62,7 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:https://gitlab.com/mdashlw/kda.git")
+                    connection.set("scm:git:https://github.com/mdashl/KDA.git")
                 }
             }
         }
@@ -81,9 +81,12 @@ bintray {
         repo = "maven"
         name = "KDA"
         desc = "Kotlin-specific features for JDA (Java Discord API)"
+        issueTrackerUrl = "https://github.com/mdashl/KDA/issues"
+        vcsUrl = "https://github.com/mdashl/KDA.git"
+        githubRepo = "https://github.com/mdashl/KDA.git"
+        githubReleaseNotesFile = "README.md"
+        publicDownloadNumbers = false
         setLicenses("MIT")
-        websiteUrl = "https://gitlab.com/mdashlw/kda"
-        issueTrackerUrl = "https://gitlab.com/mdashlw/kda/issues"
-        vcsUrl = "https://gitlab.com/mdashlw/kda.git"
+        setLabels("Discord", "JDA", "KDA", "Kotlin")
     }
 }
