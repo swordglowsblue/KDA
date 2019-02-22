@@ -1,6 +1,8 @@
- [![](https://img.shields.io/bintray/v/mdashlw/maven/KDA.svg?label=KDA&style=flat-square)](https://bintray.com/mdashlw/maven/KDA/_latestVersion)
- [![](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat-square)](https://opensource.org/licenses/MIT)
- [![](https://gitlab.com/mdashlw/kda/badges/master/pipeline.svg)](https://gitlab.com/mdashlw/kda/commits/master)
+ [![Bintray](https://img.shields.io/bintray/v/mdashlw/maven/KDA.svg?label=KDA&style=flat-square)](https://bintray.com/mdashlw/maven/KDA/_latestVersion)
+ [![GitHub](https://img.shields.io/github/license/mdashl/KDA.svg?style=flat-square)](https://choosealicense.com/licenses/mit/)
+ [![Travis (.com)](https://img.shields.io/travis/com/mdashl/KDA.svg?style=flat-square)](http://travis-ci.com/mdashl/KDA)
+ ![GitHub last commit](https://img.shields.io/github/last-commit/mdashl/KDA.svg?style=flat-square)
+ ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/mdashl/KDA.svg?style=flat-square)
 
 # KDA (Kotlin Discord API)
 
@@ -296,4 +298,4 @@ TextChannel#send("Content") {
 
 ## License
 
-The project is licensed under [the MIT license](https://gitlab.com/mdashlw/kda/blob/master/LICENSE).
+The project is licensed under the **[MIT license](https://choosealicense.com/licenses/mit/)**.
