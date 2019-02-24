@@ -35,7 +35,7 @@ abstract class Command {
             .sortedByDescending { it.parameterCount }
 
     fun register() {
-        CommandHandler.COMMANDS += this
+        CommandHandler.commands += this
     }
 
     open fun checkPermission(): Boolean = true

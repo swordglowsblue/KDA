@@ -16,7 +16,7 @@ object HelpCommand : Command() {
 
     @GeneralCommand
     fun help() {
-        val commands = CommandHandler.COMMANDS.filter(Command::displayInHelp)
+        val commands = CommandHandler.commands.filter(Command::displayInHelp)
 
         reply {
             title = "commandhandler.commands.help.reply.title".i18n()
@@ -38,7 +38,7 @@ object HelpCommand : Command() {
 
     @GeneralCommand
     fun help(commandName: String) {
-        val command = CommandHandler.COMMANDS.find { it.aliases.containsIgnoreCase(commandName) }
+        val command = CommandHandler.commands.find { it.aliases.containsIgnoreCase(commandName) }
 
         if (command == null) {
             replyError(

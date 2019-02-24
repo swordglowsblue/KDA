@@ -32,8 +32,8 @@ object CommandHandler : ListenerAdapter() {
     lateinit var errorColor: Color
     var displayStaffCommandsInHelp: Boolean = false
 
-    val COMMANDS: ArrayList<Command> = ArrayList()
-    val CONTEXTS: ArrayList<CommandContext<*>> = ArrayList()
+    val commands: ArrayList<Command> = ArrayList()
+    val contexts: ArrayList<CommandContext<*>> = ArrayList()
 
     fun setup(
         prefix: String,
@@ -78,20 +78,23 @@ object CommandHandler : ListenerAdapter() {
     }
 
     private fun getCommand(message: String): Command? {
+        if (!message.startsWith(prefix, true)) {
+            return null
+        }
+
         val s = message.split(" ")[0]
 
-        return COMMANDS.find { command -> command.aliases.any { s.equals(prefix + it, true) } }
+        return commands.find { command -> command.aliases.any { s.equals(prefix + it, true) } }
     }
 
     private fun getCommandContext(type: Class<*>): CommandContext<*> =
-        CONTEXTS.find { it.type == type }
+        contexts.find { it.type == type }
             ?: throw IllegalArgumentException(
                 "commandhandler.no_command_context".i18n()
                     .placeholder("type", type.simpleName)
             )
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-
         val message = event.message
         val content = message.contentRaw.removeDoubleSpaces()
         val command = getCommand(content) ?: return

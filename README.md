@@ -237,7 +237,9 @@ Event Waiter will handle every instance of this event until predicate is complet
 ```kotlin
 // When JDA receive a message from user with ID `1234567890123` in channel `0123456780123`,
 // it will execute the action and stop listening to an event.
-JDA#wait<GuildMessageReceivedEvent>({ author.id == "1234567890123" && channel.id == "0123456780123" }) {
+jda.wait<GuildMessageReceivedEvent>(
+    { author.id == "" && message.contentRaw in listOf("yes", "no") }) {
+
     // ...
 }
 ```
@@ -276,9 +278,9 @@ Returns true if a user is **staff** and false if they are not.
 User#isStaff()
 ```
 
-#### Text Channel
+#### Message Channel
 
-###### TextChannel#send
+###### MessageChannel#send
 
 Better sendMessage method.
 Content is optional.
@@ -286,7 +288,7 @@ Content is optional.
 **Note**: Extension returns `MessageAction`, so `.queue()` is still required.
 
 ```kotlin
-TextChannel#send("Content") {
+MessageChannel#send("Content") {
     // Embed Builder
 
     title = "test"
