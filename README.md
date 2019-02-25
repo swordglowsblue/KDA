@@ -124,7 +124,7 @@ object TestCommand : Command() {
     */
 
     // Optional
-    override fun checkPermission(): Boolean {
+    override fun checkAccess(): Boolean {
         // ...
     }
 
