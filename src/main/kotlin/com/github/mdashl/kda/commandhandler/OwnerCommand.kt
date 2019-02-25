@@ -4,6 +4,6 @@ import com.github.mdashl.kda.extensions.isOwner
 
 abstract class OwnerCommand : StaffCommand() {
 
-    override fun checkPermission(): Boolean = member.user.isOwner()
+    override fun checkAccess(): Boolean = member.user.isOwner()
 
 }

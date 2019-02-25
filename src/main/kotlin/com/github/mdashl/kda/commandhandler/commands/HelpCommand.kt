@@ -1,12 +1,11 @@
 package com.github.mdashl.kda.commandhandler.commands
 
-import com.github.mdashl.kda.KDA.jda
+import com.github.mdashl.kda.KDA.client
 import com.github.mdashl.kda.commandhandler.Command
 import com.github.mdashl.kda.commandhandler.CommandHandler
 import com.github.mdashl.kda.commandhandler.annotations.GeneralCommand
 import com.github.mdashl.kda.extensions.containsIgnoreCase
 import com.github.mdashl.kda.extensions.i18n
-import com.github.mdashl.kda.extensions.placeholder
 
 object HelpCommand : Command() {
 
@@ -19,34 +18,25 @@ object HelpCommand : Command() {
         val commands = CommandHandler.commands.filter(Command::displayInHelp)
 
         reply {
-            title = "commandhandler.commands.help.reply.title".i18n()
-                .placeholder("bot", jda.selfUser.name)
-            description += "commandhandler.commands.help.reply.description".i18n()
-                .placeholder("prefix", CommandHandler.prefix)
+            title = "commandhandler.commands.help.reply.title".i18n(client.selfUser.name)
+            description += "commandhandler.commands.help.reply.description".i18n(CommandHandler.prefix)
             field {
                 name = "commandhandler.commands.help.reply.fields.command.name".i18n()
-                value = "commandhandler.commands.help.reply.fields.command.value".i18n()
-                    .placeholder("commands", commands.joinToString("\n") { it.name })
+                value =
+                    "commandhandler.commands.help.reply.fields.command.value".i18n(commands.joinToString("\n") { it.name })
             }
             field {
                 name = "commandhandler.commands.help.reply.fields.description.name".i18n()
-                value = "commandhandler.commands.help.reply.fields.description.value".i18n()
-                    .placeholder("commands", commands.joinToString("\n") { it.description })
+                value =
+                    "commandhandler.commands.help.reply.fields.description.value".i18n(commands.joinToString("\n") { it.description })
             }
         }
     }
 
     @GeneralCommand
-    fun help(commandName: String) {
-        val command = CommandHandler.commands.find { it.aliases.containsIgnoreCase(commandName) }
-
-        if (command == null) {
-            replyError(
-                "commandhandler.commands.help.reply.error".i18n()
-                    .placeholder("command", commandName)
-            )
-            return
-        }
+    fun help(name: String) {
+        val command = CommandHandler.commands.find { it.aliases.containsIgnoreCase(name) }
+            ?: throw IllegalArgumentException("commandhandler.commands.help.reply.error".i18n())
 
         command.channel = channel
         command.replyHelp()

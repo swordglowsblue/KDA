@@ -115,6 +115,8 @@ object TestCommand : Command() {
     // Optional
     override val sendTyping: Boolean = true // Default - false
     override val displayInHelp: Boolean = false // Default - true
+    override val userPermissions: List<Permission> = listOf(Permission.MANAGE_SERVER) // Default - empty
+    override val botPermissions: List<Permission> = listOf(Permission.MESSAGE_ATTACH_FILES) // Default - empty
 
     /*
         Available variables here:

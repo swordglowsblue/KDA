@@ -4,7 +4,6 @@ import com.github.mdashl.kda.KDA
 import com.github.mdashl.kda.commandhandler.Command
 import com.github.mdashl.kda.commandhandler.annotations.GeneralCommand
 import com.github.mdashl.kda.extensions.i18n
-import com.github.mdashl.kda.extensions.placeholder
 
 object InviteCommand : Command() {
 
@@ -12,13 +11,18 @@ object InviteCommand : Command() {
     override val description: String = "commandhandler.commands.invite.description".i18n()
     override val usage: String = "commandhandler.commands.invite.usage".i18n()
 
-    private val INVITE_LINK by lazy { KDA.jda.retrieveApplicationInfo().complete().getInviteUrl() }
+    private lateinit var INVITE_LINK: String
+
+    init {
+        KDA.client.retrieveApplicationInfo().queue {
+            INVITE_LINK = it.getInviteUrl()
+        }
+    }
 
     @GeneralCommand
     fun invite() {
         reply {
-            description += "commandhandler.commands.invite.reply.description".i18n()
-                .placeholder("link", INVITE_LINK)
+            description += "commandhandler.commands.invite.reply.description".i18n(INVITE_LINK)
         }
     }
 

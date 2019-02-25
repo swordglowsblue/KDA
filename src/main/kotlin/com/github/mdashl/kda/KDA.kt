@@ -6,29 +6,29 @@ import java.util.*
 
 object KDA {
 
-    lateinit var jda: JDA
+    lateinit var client: JDA
 
     lateinit var ownerId: String
     lateinit var staffIds: List<String>
     lateinit var locale: Locale
 
-    lateinit var MESSAGES: ResourceBundle
+    lateinit var messages: ResourceBundle
 
     val owner: User
-        get() = jda.getUserById(ownerId)
+        get() = client.getUserById(ownerId)
 
     fun setup(
-        jda: JDA,
+        client: JDA,
         ownerId: String,
         staffIds: List<String>,
         locale: Locale
     ) {
-        this.jda = jda
+        this.client = client
         this.ownerId = ownerId
         this.staffIds = staffIds
         this.locale = locale
 
-        this.MESSAGES = ResourceBundle.getBundle("messages", locale)
+        this.messages = ResourceBundle.getBundle("messages", locale)
     }
 
 }

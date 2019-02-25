@@ -7,6 +7,6 @@ abstract class StaffCommand : Command() {
 
     override val displayInHelp: Boolean = CommandHandler.displayStaffCommandsInHelp
 
-    override fun checkPermission(): Boolean = member.user.isOwner() || member.user.isStaff()
+    override fun checkAccess(): Boolean = member.user.isOwner() || member.user.isStaff()
 
 }

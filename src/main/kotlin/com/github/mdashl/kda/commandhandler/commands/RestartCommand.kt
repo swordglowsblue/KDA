@@ -13,7 +13,7 @@ object RestartCommand : OwnerCommand() {
 
     @GeneralCommand
     fun restart() {
-        KDA.jda.shutdown()
+        KDA.client.shutdown()
         System.exit(0)
     }
 

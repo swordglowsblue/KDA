@@ -7,7 +7,10 @@ import com.github.mdashl.kda.commandhandler.commands.HelpCommand
 import com.github.mdashl.kda.commandhandler.commands.InviteCommand
 import com.github.mdashl.kda.commandhandler.commands.RestartCommand
 import com.github.mdashl.kda.commandhandler.contexts.*
-import com.github.mdashl.kda.extensions.*
+import com.github.mdashl.kda.extensions.containsIgnoreCase
+import com.github.mdashl.kda.extensions.i18n
+import com.github.mdashl.kda.extensions.removeDoubleSpaces
+import com.github.mdashl.kda.extensions.toInt
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -51,7 +54,7 @@ object CommandHandler : ListenerAdapter() {
     }
 
     private fun registerListener() {
-        KDA.jda.addEventListener(this)
+        KDA.client.addEventListener(this)
     }
 
     private fun registerDefaults() {
@@ -70,14 +73,14 @@ object CommandHandler : ListenerAdapter() {
     private fun registerDefaultCommands() {
         HelpCommand.register()
         RestartCommand.register()
-        KDA.jda.retrieveApplicationInfo().queue {
+        KDA.client.retrieveApplicationInfo().queue {
             if (it.isBotPublic) {
                 InviteCommand.register()
             }
         }
     }
 
-    private fun getCommand(message: String): Command? {
+    private fun findCommand(message: String): Command? {
         if (!message.startsWith(prefix, true)) {
             return null
         }
@@ -89,15 +92,12 @@ object CommandHandler : ListenerAdapter() {
 
     private fun getCommandContext(type: Class<*>): CommandContext<*> =
         contexts.find { it.type == type }
-            ?: throw IllegalArgumentException(
-                "commandhandler.no_command_context".i18n()
-                    .placeholder("type", type.simpleName)
-            )
+            ?: throw IllegalArgumentException("commandhandler.no_command_context".i18n(type.simpleName))
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         val message = event.message
         val content = message.contentRaw.removeDoubleSpaces()
-        val command = getCommand(content) ?: return
+        val command = findCommand(content) ?: return
         val guild = event.guild
         val member = event.member
         val user = event.author
@@ -113,8 +113,18 @@ object CommandHandler : ListenerAdapter() {
             return
         }
 
-        if (!command.checkPermission()) {
-            command.replyError("commandhandler.user_no_permission".i18n())
+        if (!command.checkAccess()) {
+            command.replyError("commandhandler.no_access".i18n())
+            return
+        }
+
+        if (!command.checkUserPermissions()) {
+            command.replyError("commandhandler.user_no_permissions".i18n(command.userPermissions.joinToString { it.getName() }))
+            return
+        }
+
+        if (!command.checkBotPermissions()) {
+            command.replyError("commandhandler.bot_no_permissions".i18n(command.botPermissions.joinToString { it.getName() }))
             return
         }
 
@@ -178,10 +188,7 @@ object CommandHandler : ListenerAdapter() {
                     ?.let { handleCommandException(command, it) }
                     ?: command.replyError(exception.message.toString())
             }
-            is InsufficientPermissionException -> command.reply(
-                "commandhandler.bot_no_permission".i18n()
-                    .placeholder("permission", exception.permission.getName())
-            )
+            is InsufficientPermissionException -> command.reply("commandhandler.bot_no_permissions".i18n(exception.permission.getName()))
             is InvocationTargetException -> handleCommandException(command, exception.cause!!)
             is ExecutionException -> handleCommandException(command, exception.cause!!)
             is URISyntaxException -> command.replyError("commandhandler.illegal_character".i18n())
