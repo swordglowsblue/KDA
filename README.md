@@ -1,4 +1,4 @@
- [![Bintray](https://img.shields.io/bintray/v/mdashlw/maven/KDA.svg?label=KDA&style=flat-square)](https://bintray.com/mdashlw/maven/KDA/_latestVersion)
+ [![Download](https://api.bintray.com/packages/mdashlw/maven/KDA/images/download.svg)](https://bintray.com/mdashlw/maven/KDA/_latestVersion)
  [![GitHub](https://img.shields.io/github/license/mdashl/KDA.svg?style=flat-square)](https://choosealicense.com/licenses/mit/)
  [![Travis (.com)](https://img.shields.io/travis/com/mdashl/KDA.svg?style=flat-square)](http://travis-ci.com/mdashl/KDA)
  ![GitHub last commit](https://img.shields.io/github/last-commit/mdashl/KDA.svg?style=flat-square)
