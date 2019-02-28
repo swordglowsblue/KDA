@@ -85,7 +85,7 @@ object CommandHandler : ListenerAdapter() {
             return null
         }
 
-        val s = message.split(" ")[0]
+        val s = message.drop(prefix.length).trim().split(" ")[0]
 
         return commands.find { command -> command.aliases.any { s.equals(prefix + it, true) } }
     }
